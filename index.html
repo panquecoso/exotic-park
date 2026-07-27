@@ -1,0 +1,4101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exotic Park — reserva de criaturas raras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #fff8e7;
+      --ink: #3d2914;
+      --ink-soft: #5c4030;
+      --muted: var(--ink-soft);
+      --outline: #14110d;
+      --wood: #7c4a2e;
+      --wood-dark: #4a2c1a;
+      --jungle: #1c9f6e;
+      --jungle-deep: #0d6b47;
+      --sun: #ffb347;
+      --sun-hot: #ff7b00;
+      --card-rim: #e85d2c;
+      --card-rim-dark: #b84015;
+      --gold-coin: #f4c430;
+      --sky: #6ec8ff;
+      --grass: #3cb878;
+      --shadow-chunk: 0 8px 0 rgba(0, 0, 0, 0.18);
+      font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      color: var(--ink);
+      padding: 20px clamp(12px, 3vw, 40px) 36px;
+      background-color: #2d5016;
+      background-image:
+        repeating-linear-gradient(
+          -8deg,
+          transparent,
+          transparent 18px,
+          rgba(0, 0, 0, 0.04) 18px,
+          rgba(0, 0, 0, 0.04) 20px
+        ),
+        radial-gradient(ellipse 100% 80% at 50% -10%, #a5d8ff 0%, #7dd3fc 25%, #fde047 48%, #fb923c 68%, var(--grass) 68%, #15803d 100%);
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      display: block;
+      height: 14px;
+      margin-top: -20px;
+      margin-bottom: 14px;
+      margin-left: calc(-1 * clamp(12px, 3vw, 40px));
+      margin-right: calc(-1 * clamp(12px, 3vw, 40px));
+      width: calc(100% + 2 * clamp(12px, 3vw, 40px));
+      box-sizing: border-box;
+      background: repeating-linear-gradient(
+        105deg,
+        #fde047 0px,
+        #fde047 10px,
+        var(--outline) 10px,
+        var(--outline) 22px,
+        #f472b6 22px,
+        #f472b6 34px,
+        var(--outline) 34px,
+        var(--outline) 46px,
+        #38bdf8 46px,
+        #38bdf8 58px,
+        var(--outline) 58px,
+        var(--outline) 70px
+      );
+      border-bottom: 3px solid var(--outline);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+      z-index: 1;
+    }
+
+    .park-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 16px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .banner-wrap {
+      flex: 1 1 280px;
+      min-width: 0;
+    }
+
+    .park-banner {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      max-width: 620px;
+      padding: 14px 22px 16px;
+      background: linear-gradient(185deg, #fff176 0%, #ffeb3b 28%, #fdd835 52%, #f9a825 100%);
+      border: 7px solid var(--outline);
+      border-radius: 16px;
+      box-shadow:
+        0 10px 0 var(--outline),
+        0 14px 0 rgba(20, 17, 13, 0.35),
+        0 20px 32px rgba(0, 0, 0, 0.28),
+        inset 0 3px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -6px 0 rgba(245, 158, 11, 0.35);
+      transform: rotate(-0.8deg);
+    }
+
+    .park-banner::before,
+    .park-banner::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle at 35% 35%, #cbd5e1, #475569);
+      border-radius: 50%;
+      top: -9px;
+      box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    .park-banner::before { left: 18px; }
+    .park-banner::after { right: 18px; }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    h1 .title-exotic {
+      display: block;
+      font-family: "Bungee", cursive;
+      font-weight: 400;
+      font-size: clamp(1.65rem, 6.5vw, 2.85rem);
+      line-height: 1.05;
+      letter-spacing: 0.08em;
+      background: linear-gradient(185deg, #5eead4 0%, #22d3ee 38%, #14b8a6 72%, #0d9488 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(-3px -3px 0 var(--outline)) drop-shadow(3px -3px 0 var(--outline))
+        drop-shadow(-3px 3px 0 var(--outline)) drop-shadow(3px 3px 0 var(--outline))
+        drop-shadow(0 5px 0 rgba(15, 23, 42, 0.35));
+    }
+
+    @supports not (background-clip: text) {
+      h1 .title-exotic {
+        color: #2dd4bf;
+      }
+    }
+
+    h1 .title-park {
+      display: block;
+      margin-top: 8px;
+      font-family: "Fredoka", "Nunito", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1rem, 3.8vw, 1.55rem);
+      line-height: 1.15;
+      color: #ecfdf5;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-shadow:
+        -2px -2px 0 var(--outline),
+        2px -2px 0 var(--outline),
+        -2px 2px 0 var(--outline),
+        2px 2px 0 var(--outline),
+        0 4px 0 rgba(13, 148, 136, 0.4);
+    }
+
+    .park-sub {
+      display: block;
+      margin-top: 6px;
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: 0.82rem;
+      text-align: center;
+      color: #134e4a;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .coins {
+      position: relative;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      background: linear-gradient(180deg, #fde047 0%, #facc15 42%, #d97706 100%);
+      color: var(--outline);
+      padding: 13px 24px;
+      padding-right: 38px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      border: 6px solid var(--outline);
+      box-shadow:
+        0 8px 0 var(--outline),
+        0 12px 0 rgba(20, 17, 13, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.6);
+      font-variant-numeric: tabular-nums;
+      transform: rotate(-2.8deg);
+    }
+
+    .coins::after {
+      content: "\2605";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%) rotate(12deg);
+      font-size: 1.35rem;
+      color: #ffeb3b;
+      text-shadow:
+        -2px -2px 0 var(--outline),
+        2px -2px 0 var(--outline),
+        -2px 2px 0 var(--outline),
+        2px 2px 0 var(--outline);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .coins span.g {
+      color: #7c2d12;
+      font-size: clamp(1.25rem, 4vw, 1.65rem);
+      font-family: "Bungee", cursive;
+      font-weight: 400;
+      text-shadow:
+        -1px -1px 0 #fff59d,
+        1px -1px 0 #fff59d,
+        -1px 1px 0 #fff59d,
+        1px 1px 0 #fff59d,
+        0 2px 0 rgba(20, 17, 13, 0.25);
+    }
+
+    .tick-hint {
+      font-family: "Nunito", sans-serif;
+      font-size: 0.84rem;
+      font-weight: 900;
+      color: #fef08a;
+      margin: 14px auto 18px;
+      max-width: 1000px;
+      padding: 12px 18px;
+      text-align: center;
+      background: rgba(15, 10, 8, 0.72);
+      border: 4px dashed #fbbf24;
+      border-radius: 12px;
+      box-shadow:
+        0 0 0 2px var(--outline),
+        0 6px 0 var(--outline),
+        inset 0 0 0 1px rgba(251, 191, 36, 0.25);
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .cage-carousel {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .cage-nav-hint {
+      font-family: "Nunito", sans-serif;
+      font-size: clamp(0.78rem, 2.8vw, 0.92rem);
+      font-weight: 900;
+      text-align: center;
+      color: #fef08a;
+      margin: 0 auto 10px;
+      padding: 10px 14px;
+      max-width: 640px;
+      background: rgba(15, 10, 8, 0.55);
+      border: 3px solid var(--card-rim);
+      border-radius: 12px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    .cage-nav-hint strong {
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .cage-nav-hint kbd {
+      display: inline-block;
+      padding: 4px 10px;
+      margin: 0 4px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #fff8e7, #fde68a);
+      color: #422006;
+      border: 2px solid var(--outline);
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.9em;
+      box-shadow: 0 3px 0 var(--outline);
+    }
+
+    .cage-page-label {
+      text-align: center;
+      font-family: "Bungee", "Fredoka", sans-serif;
+      font-size: 0.98rem;
+      color: var(--cream);
+      text-shadow: 0 2px 0 var(--outline);
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .cage-viewport {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    .cage-strip.deck {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 22px;
+      transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+      will-change: transform;
+    }
+
+    article.card {
+      background: var(--cream);
+      border-radius: 22px;
+      overflow: visible;
+      border: 6px solid var(--card-rim);
+      outline: 3px solid var(--outline);
+      outline-offset: 2px;
+      box-shadow:
+        0 10px 0 var(--card-rim-dark),
+        0 0 0 2px var(--outline),
+        0 16px 28px rgba(0, 0, 0, 0.22);
+      display: flex;
+      flex-direction: column;
+      min-height: 340px;
+      position: relative;
+    }
+
+    .cage-strip article.card:nth-child(even) {
+      transform: rotate(1deg);
+    }
+
+    .cage-strip article.card:nth-child(odd) {
+      transform: rotate(-0.6deg);
+    }
+
+    article.card::before {
+      content: "🦕";
+      position: absolute;
+      top: -12px;
+      right: -6px;
+      font-size: 1.75rem;
+      filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.25));
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .card:nth-child(even)::before {
+      content: "🦖";
+    }
+
+    .card .art {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      border-radius: 14px 14px 0 0;
+      margin: 6px 6px 0;
+      background:
+        radial-gradient(ellipse 95% 70% at 50% 8%, rgba(255, 255, 255, 0.45), transparent 52%),
+        linear-gradient(
+          180deg,
+          #58c4ff 0%,
+          #38bdf8 22%,
+          #86efac 48%,
+          #4ade80 72%,
+          #22c55e 92%,
+          #15803d 100%
+        );
+      border: 5px solid var(--outline);
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.25),
+        inset 0 -5px 0 rgba(20, 17, 13, 0.15),
+        0 4px 0 rgba(20, 17, 13, 0.4);
+    }
+
+    .card .art canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .card .art.locked::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(40, 30, 20, 0.55),
+        rgba(40, 30, 20, 0.55) 8px,
+        rgba(60, 45, 30, 0.5) 8px,
+        rgba(60, 45, 30, 0.5) 16px
+      );
+      backdrop-filter: blur(2px);
+    }
+
+    .card .art.locked .lock-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: "Bungee", cursive;
+      font-weight: 400;
+      font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-shadow:
+        -2px -2px 0 var(--outline),
+        2px -2px 0 var(--outline),
+        -2px 2px 0 var(--outline),
+        2px 2px 0 var(--outline),
+        0 3px 0 var(--outline);
+      z-index: 1;
+      padding: 0 8px;
+      text-align: center;
+    }
+
+    .body {
+      padding: 14px 18px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .body h2 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #9a3412;
+      text-shadow: 1px 1px 0 #fef3c7;
+    }
+
+    .body .spec-tag {
+      font-family: "Nunito", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--muted);
+      margin-top: -4px;
+      margin-bottom: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .body p.desc {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      flex: 1;
+      font-weight: 600;
+    }
+
+    .bar-wrap {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--wood);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .bar {
+      height: 14px;
+      border-radius: 999px;
+      background: #d6d3d1;
+      margin-top: 6px;
+      overflow: hidden;
+      border: 3px solid var(--outline);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .bar > i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #4ade80, #16a34a);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35);
+      transition: width 0.25s ease;
+    }
+
+    .income {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--jungle-deep);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    button {
+      font-family: "Fredoka", "Nunito", sans-serif;
+      cursor: pointer;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.1s, box-shadow 0.1s, filter 0.1s, opacity 0.1s;
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2) !important;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(0.25);
+    }
+
+    .btn-buy {
+      background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
+      color: #422006;
+      flex: 1;
+      min-width: 120px;
+      border: 4px solid #a16207;
+      box-shadow: 0 6px 0 #713f12, inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-feed {
+      background: linear-gradient(180deg, #4ade80 0%, #22c55e 45%, #15803d 100%);
+      color: #fff;
+      flex: 1;
+      border: 4px solid #14532d;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+      box-shadow: 0 6px 0 #14532d, inset 0 2px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-tour:not(.ghost) {
+      background: linear-gradient(185deg, #f472b6 0%, #ec4899 35%, #db2777 70%, #be185d 100%);
+      color: #fffef8;
+      border: 5px solid var(--outline);
+      text-shadow:
+        -1px -1px 0 rgba(20, 17, 13, 0.4),
+        1px -1px 0 rgba(20, 17, 13, 0.4),
+        0 2px 0 rgba(20, 17, 13, 0.35);
+      box-shadow:
+        0 8px 0 var(--outline),
+        0 12px 20px rgba(190, 24, 93, 0.35),
+        inset 0 2px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-tour.ghost {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+      color: #fff;
+      border: 5px solid rgba(255, 255, 255, 0.48);
+      box-shadow:
+        0 6px 0 rgba(20, 17, 13, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .intro {
+      position: relative;
+      margin: 0 auto 22px;
+      padding: 32px 22px 18px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #166534 0%, #15803d 50%, #14532d 100%);
+      color: #ecfccb;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      font-weight: 700;
+      border: 5px solid var(--outline);
+      box-shadow:
+        0 8px 0 var(--outline),
+        0 14px 24px rgba(0, 0, 0, 0.22),
+        inset 0 2px 0 rgba(255, 255, 255, 0.12);
+      overflow: visible;
+    }
+
+    .intro::before {
+      content: "ATENCION";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -45%) rotate(-2deg);
+      font-family: "Bungee", cursive;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      color: var(--outline);
+      background: linear-gradient(180deg, #ffeb3b 0%, #fdd835 100%);
+      padding: 6px 18px 5px;
+      border: 3px dashed var(--outline);
+      border-radius: 6px;
+      box-shadow:
+        0 3px 0 var(--outline),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .intro strong {
+      color: #fef08a;
+      text-shadow: 1px 1px 0 #14532d;
+    }
+
+    .footer-actions {
+      max-width: 1000px;
+      margin: 26px auto 0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(180deg, #fff8e7, #fde68a);
+      color: #422006;
+      padding: 14px 22px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border: 5px solid var(--outline);
+      box-shadow: 0 10px 0 var(--outline), 0 16px 32px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.35s ease;
+      z-index: 100;
+      max-width: min(90vw, 440px);
+      text-align: center;
+      font-family: "Nunito", sans-serif;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .main-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 14px;
+      max-width: 1000px;
+    }
+
+    .main-tab {
+      font-family: "Bungee", "Fredoka", sans-serif;
+      font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+      padding: 12px 24px;
+      border-radius: 14px;
+      cursor: pointer;
+      border: 5px solid var(--outline);
+      background: linear-gradient(180deg, #78716c 0%, #57534e 100%);
+      color: #fafaf9;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 0 var(--outline);
+      transition: transform 0.1s, filter 0.1s;
+      letter-spacing: 0.04em;
+    }
+
+    .main-tab:hover {
+      filter: brightness(1.06);
+    }
+
+    .main-tab:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--outline);
+    }
+
+    .main-tab.active {
+      background: linear-gradient(180deg, #a855f7 0%, #7e22ce 55%, #5b21b6 100%);
+      color: #faf5ff;
+      box-shadow: 0 6px 0 #4c1d95;
+    }
+
+    .view-panel.hidden {
+      display: none !important;
+    }
+
+    .lab-view {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .lab-banner {
+      text-align: center;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1rem, 3.6vw, 1.35rem);
+      color: #e9d5ff;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-radius: 16px;
+      border: 5px solid #4c1d95;
+      background: linear-gradient(135deg, #581c87 0%, #4c1d95 35%, #312e81 100%);
+      box-shadow: 0 8px 0 #1e1b4b;
+      text-shadow: 2px 2px 0 #1e1b4b;
+    }
+
+    .lab-blurb {
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      line-height: 1.55;
+      background: rgba(15, 10, 8, 0.55);
+      border-radius: 12px;
+      border: 3px dashed #c084fc;
+    }
+
+    .lab-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    article.lab-card {
+      background: linear-gradient(160deg, #faf5ff 0%, #e9d5ff 55%, #ddd6fe 100%);
+      border-radius: 20px;
+      padding: 18px 18px 20px;
+      border: 5px solid #6d28d9;
+      outline: 3px solid var(--outline);
+      outline-offset: 0;
+      box-shadow: 0 10px 0 #4c1d95;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      transform: rotate(-0.4deg);
+    }
+
+    article.lab-card:nth-child(even) {
+      transform: rotate(0.65deg);
+    }
+
+    article.lab-card h3 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.15rem;
+      color: #4c1d95;
+      text-shadow: 1px 1px 0 #fae8ff;
+    }
+
+    .lab-icon {
+      font-size: 2.25rem;
+      text-align: center;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+    }
+
+    article.lab-card .lab-detail {
+      font-family: "Nunito", sans-serif;
+      font-weight: 700;
+      font-size: 0.87rem;
+      color: var(--wood-dark);
+      line-height: 1.48;
+      flex: 1;
+    }
+
+    article.lab-card .lab-level-tag {
+      font-family: "Bungee", sans-serif;
+      font-size: 0.85rem;
+      color: #5b21b6;
+      text-align: center;
+      padding: 6px;
+      background: rgba(255, 255, 255, 0.65);
+      border-radius: 10px;
+      border: 2px solid #7c3aed;
+    }
+
+    .btn-lab-buy {
+      font-family: "Fredoka", sans-serif;
+      font-size: 0.96rem;
+      padding: 12px;
+      margin-top: 4px;
+      border-radius: 14px;
+      border: 4px solid #4c1d95;
+      cursor: pointer;
+      background: linear-gradient(180deg, #ddd6fe, #c4b5fd);
+      color: #3b0764;
+      font-weight: 600;
+      box-shadow: 0 6px 0 #3730a3;
+      transition: transform 0.1s, opacity 0.1s;
+    }
+
+    .btn-lab-buy:hover:not(:disabled) {
+      filter: brightness(1.05);
+    }
+
+    .btn-lab-buy:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #3730a3;
+    }
+
+    .btn-lab-buy:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    article.lab-card.maxed .btn-lab-buy {
+      display: none;
+    }
+
+    article.lab-card.maxed::after {
+      content: "¡Máximo!";
+      font-family: "Bungee", sans-serif;
+      font-size: 0.92rem;
+      text-align: center;
+      padding: 10px;
+      color: #14532d;
+      background: linear-gradient(180deg, #bbf7d0, #86efac);
+      border-radius: 10px;
+      border: 3px solid var(--outline);
+      margin-top: 4px;
+    }
+
+    .top-badges {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .dna-strip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.86rem;
+      font-family: "Nunito", sans-serif;
+      color: #faf5ff;
+      background: linear-gradient(180deg, #a855f7 0%, #7c3aed 50%, #5b21b6 100%);
+      border: 5px solid var(--outline);
+      box-shadow: 0 6px 0 var(--outline);
+      transform: rotate(1.5deg);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dna-strip span.dna-n {
+      font-family: "Bungee", cursive;
+      font-size: 1.2rem;
+      color: #fef08a;
+      text-shadow: 0 2px 0 #4c1d95;
+    }
+
+    .lab-section-head {
+      font-family: "Bungee", cursive;
+      font-size: clamp(0.95rem, 3.2vw, 1.2rem);
+      color: #fef08a;
+      text-align: center;
+      margin: 22px 0 14px;
+      text-shadow: 2px 2px 0 #1e1b4b;
+    }
+
+    .lab-expedition-panel {
+      max-width: 520px;
+      margin: 0 auto 20px;
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #312e81 0%, #1e1b4b 100%);
+      border: 5px solid #c084fc;
+      box-shadow: 0 8px 0 #4c1d95;
+    }
+
+    .lab-expedition-panel p {
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #e9d5ff;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .btn-dna-expedition {
+      display: block;
+      width: 100%;
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.02rem;
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      border: 5px solid var(--outline);
+      background: linear-gradient(180deg, #f0abfc, #d946ef);
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 2px 0 #86198f;
+      box-shadow: 0 7px 0 var(--outline);
+      transition: transform 0.1s;
+    }
+
+    .btn-dna-expedition:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+
+    .btn-dna-expedition:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 var(--outline);
+    }
+
+    .btn-dna-expedition:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
+    }
+
+    .dna-dig-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 8, 6, 0.82);
+      z-index: 220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(5px);
+    }
+
+    .dna-dig-overlay.hidden {
+      display: none !important;
+    }
+
+    .dna-dig-panel {
+      background: linear-gradient(165deg, #fef3c7 0%, #fde68a 40%, #d6c09a 100%);
+      border: 6px solid var(--outline);
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 14px 0 var(--outline), 0 20px 40px rgba(0, 0, 0, 0.35);
+      font-family: "Nunito", sans-serif;
+    }
+
+    .dna-dig-panel h3 {
+      font-family: "Bungee", cursive;
+      font-size: 1.05rem;
+      text-align: center;
+      color: #422006;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 0 #fef08a;
+    }
+
+    .dna-dig-panel .dig-sub {
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.86rem;
+      color: #5c3620;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .dna-dig-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button.dig-cell {
+      aspect-ratio: 1;
+      min-height: 46px;
+      border-radius: 12px;
+      border: 4px solid rgba(62, 39, 35, 0.55);
+      cursor: pointer;
+      font-size: clamp(1.15rem, 4.5vw, 1.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #a1887f 0%, #6d4c41 85%);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.28), 0 4px 0 rgba(40, 25, 20, 0.45);
+      transition: transform 0.08s, filter 0.12s;
+      line-height: 1;
+    }
+
+    button.dig-cell:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    button.dig-cell:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    button.dig-cell.hit-stone {
+      background: linear-gradient(180deg, #d7ccc8 0%, #a1887f 100%);
+      border-color: #5d4037;
+      filter: saturate(0.85);
+      font-size: 1rem;
+      color: #4e342e;
+    }
+
+    button.dig-cell.hit-dna {
+      background: linear-gradient(160deg, #dcfce7, #86efac);
+      border-color: #15803d;
+      box-shadow: inset 0 0 12px rgba(34, 197, 94, 0.65);
+    }
+
+    button.dig-cell.missed-dna {
+      background: linear-gradient(160deg, rgba(187, 247, 208, 0.35), rgba(134, 239, 172, 0.5));
+      border-style: dashed;
+      opacity: 0.85;
+      font-size: 1rem;
+    }
+
+    .dig-hits-line {
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.82rem;
+      color: #3d2914;
+      min-height: 1.4em;
+      margin-bottom: 6px;
+    }
+
+    article.lab-genesis {
+      border-color: #0ea5e9;
+      outline-color: var(--outline);
+      box-shadow: 0 10px 0 #0369a1;
+      background: linear-gradient(160deg, #ecfeff 0%, #cffafe 50%, #a5f3fc 100%);
+    }
+
+    article.lab-genesis h3 {
+      color: #0c4a6e;
+      text-shadow: 1px 1px 0 #e0f2fe;
+    }
+
+    article.lab-genesis.done {
+      opacity: 0.92;
+      border-color: #16a34a;
+      box-shadow: 0 10px 0 #14532d;
+    }
+
+    article.lab-genesis.done .btn-genesis {
+      display: none;
+    }
+
+    article.lab-genesis.done::after {
+      content: "¡Ya está suelta en las jaulas!";
+      font-family: "Bungee", sans-serif;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 10px;
+      color: #14532d;
+      background: linear-gradient(180deg, #bbf7d0, #86efac);
+      border-radius: 10px;
+      border: 3px solid var(--outline);
+      margin-top: 4px;
+    }
+
+    .btn-genesis {
+      font-family: "Fredoka", sans-serif;
+      font-size: 0.94rem;
+      padding: 12px;
+      border-radius: 14px;
+      border: 4px solid #0c4a6e;
+      cursor: pointer;
+      background: linear-gradient(180deg, #38bdf8, #0284c7);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 6px 0 #0c4a6e;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-genesis:hover:not(:disabled) {
+      filter: brightness(1.05);
+    }
+
+    .btn-genesis:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #0c4a6e;
+    }
+
+    .btn-genesis:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="park-shell">
+  <header class="top">
+    <div class="banner-wrap">
+      <div class="park-banner">
+        <h1><span class="title-exotic">EXOTIC</span><span class="title-park">PARK</span></h1>
+        <span class="park-sub">Fauna imposible — fichas ✦ · recintos · ADN 🧬</span>
+      </div>
+    </div>
+    <div class="top-badges">
+      <div class="coins"><span>🎟️ Fichas · Exotic Park:</span> <span class="g" id="coins">0</span></div>
+      <div class="dna-strip"><span>Muestras 🧬 ADN:</span> <span class="dna-n" id="dnaCount">0</span></div>
+    </div>
+  </header>
+  <p class="tick-hint" id="incomeTotal">🦴 Ingresos por segundo con bichos alojados: 0 ✦/s</p>
+
+  <nav class="main-tabs" role="tablist" aria-label="Secciones de Exotic Park">
+    <button type="button" role="tab" class="main-tab active" id="tabPark" aria-selected="true">🌴 Habitat</button>
+    <button type="button" role="tab" class="main-tab" id="tabLab" aria-selected="false">🧪 Laboratorio</button>
+  </nav>
+
+  <div class="view-panel" id="viewPark">
+  <div class="intro" id="intro">
+    ¡Bienvenides a <strong>Exotic Park</strong>: rarezas brillantes entre palmeras y laboratorio propio. Gastá <strong>fichas ✦</strong> para abrir nuevos recintos.
+    Cada bicho es un <strong>retrato vectorial viviente</strong> en su corral. Si el <strong>ánimo</strong> está bajo ganás menos huevos de oro —
+    ¡Alimentá antes de la visita del autobús escolar! Las jaulas se ven de a dos con <strong>←</strong> y <strong>→</strong>. En el <strong>laboratorio</strong> mejorás equipo, vas a buscar <strong>ADN</strong> y <strong>clonás criaturas nuevas</strong>.
+  </div>
+
+  <div class="cage-carousel" id="cageCarousel">
+    <p class="cage-nav-hint">Mostramos <strong>2 jaulas</strong> a la vez. Teclado: <kbd>←</kbd> volver · <kbd>→</kbd> avanzar pasillo</p>
+    <p class="cage-page-label" id="cagePageLabel" aria-live="polite"></p>
+    <div class="cage-viewport" id="cageViewport">
+      <div class="deck cage-strip" id="deck"></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="view-panel lab-view hidden" id="viewLab" role="tabpanel">
+    <div class="lab-banner">🧬 LABORATORIO EXÓTICO · Exotic Park 🧬</div>
+    <p class="lab-blurb">
+      Mandá el jeep a la <strong>cantera</strong> para traer muestras de ADN fosilizado, gastá algunas fichas ✦ por viaje y
+      <strong>cloná especies que no se compran en el parque</strong>. Después las vas a ver en las jaulas como el resto.
+    </p>
+
+    <h2 class="lab-section-head">Expedición de ADN</h2>
+    <div class="lab-expedition-panel">
+      <p id="dnaExpeditionHelp">Pagás entrada y excavás en piedras hasta encontrar restos 🧬</p>
+      <button type="button" class="btn-dna-expedition" id="btnDnaExpedition">Excavar cantera (20 ✦)</button>
+    </div>
+
+    <h2 class="lab-section-head">Síntesis de criaturas nuevas</h2>
+    <p class="lab-blurb" style="margin-top: -6px;">
+      Algunos proyectos cuestan solo <strong>ADN 🧬</strong>; los de élite mezclan <strong>ADN + fichas ✦</strong> en la misma receta.
+    </p>
+
+    <div class="lab-grid lab-grid-split">
+      <article class="lab-card" id="labCardSynth">
+        <div class="lab-icon">⚗️</div>
+        <h3>Licuadora de fichas XL</h3>
+        <p class="lab-detail" id="labSynthDetail">
+          Afiná tuberías jurásicas: cada nivel suma rendimiento pasivo sobre todos los ingresos por segundo.
+        </p>
+        <p class="lab-level-tag"><span id="labSynthLvl">Nv 0 / 5</span></p>
+        <button type="button" class="btn-lab-buy" id="btnLabSynth">Invertir ✦</button>
+      </article>
+      <article class="lab-card" id="labCardZen">
+        <div class="lab-icon">🌿</div>
+        <h3>Zen del musgo ancestral</h3>
+        <p class="lab-detail" id="labZenDetail">
+          Difusores de aromas en los recintos: el &#34;ánimo del bicho&#34; cae más lento cuando no los mimás.
+        </p>
+        <p class="lab-level-tag"><span id="labZenLvl">Nv 0 / 4</span></p>
+        <button type="button" class="btn-lab-buy" id="btnLabZen">Invertir ✦</button>
+      </article>
+      <article class="lab-card" id="labCardMega">
+        <div class="lab-icon">📣</div>
+        <h3>Megáfono holográfico</h3>
+        <p class="lab-detail" id="labMegaDetail">
+          Animás más al público en visitas rápidas: cada nivel suma fichas extras por cada autobús.
+        </p>
+        <p class="lab-level-tag"><span id="labMegaLvl">Nv 0 / 3</span></p>
+        <button type="button" class="btn-lab-buy" id="btnLabMega">Invertir ✦</button>
+      </article>
+
+      <article class="lab-card lab-genesis" id="labGenDragonRayo">
+        <div class="lab-icon">⚡</div>
+        <h3>Dragón de rayo</h3>
+        <p class="lab-detail" id="labGenDragonRayoDetail"></p>
+        <p class="lab-level-tag" id="labGenDragonRayoCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenDragonRayo">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenLimonoso">
+        <div class="lab-icon">🍋</div>
+        <h3>Limonoso ácido</h3>
+        <p class="lab-detail" id="labGenLimonosoDetail"></p>
+        <p class="lab-level-tag" id="labGenLimonosoCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenLimonoso">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenEsponjoso">
+        <div class="lab-icon">🧽</div>
+        <h3>Esponjoso ancestral</h3>
+        <p class="lab-detail" id="labGenEsponjosoDetail"></p>
+        <p class="lab-level-tag" id="labGenEsponjosoCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenEsponjoso">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenOsoFuego">
+        <div class="lab-icon">🔥</div>
+        <h3>Oso de fuego</h3>
+        <p class="lab-detail" id="labGenOsoFuegoDetail"></p>
+        <p class="lab-level-tag" id="labGenOsoFuegoCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenOsoFuego">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenRoboticornio">
+        <div class="lab-icon">🤖</div>
+        <h3>Roboticornio</h3>
+        <p class="lab-detail" id="labGenRoboticornioDetail"></p>
+        <p class="lab-level-tag" id="labGenRoboticornioCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenRoboticornio">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenRoboCaca">
+        <div class="lab-icon">💩</div>
+        <h3>Robo caca</h3>
+        <p class="lab-detail" id="labGenRoboCacaDetail"></p>
+        <p class="lab-level-tag" id="labGenRoboCacaCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenRoboCaca">Clonar criatura</button>
+      </article>
+
+      <h2 class="lab-section-head">Proyectos de élite ✦ + 🧬</h2>
+
+      <article class="lab-card lab-genesis" id="labGenAjolote">
+        <div class="lab-icon">✨</div>
+        <h3>Ajolote celestial</h3>
+        <p class="lab-detail" id="labGenAjoloteDetail"></p>
+        <p class="lab-level-tag" id="labGenAjoloteCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenAjolote">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenHidra">
+        <div class="lab-icon">🐍</div>
+        <h3>Serpiente hidra</h3>
+        <p class="lab-detail" id="labGenHidraDetail"></p>
+        <p class="lab-level-tag" id="labGenHidraCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenHidra">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenCeratops">
+        <div class="lab-icon">🦖</div>
+        <h3>Mecha ceratops</h3>
+        <p class="lab-detail" id="labGenCeratopsDetail"></p>
+        <p class="lab-level-tag" id="labGenCeratopsCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenCeratops">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenPerroBubble">
+        <div class="lab-icon">🫧</div>
+        <h3>Perro burbuja</h3>
+        <p class="lab-detail" id="labGenPerroBubbleDetail"></p>
+        <p class="lab-level-tag" id="labGenPerroBubbleCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenPerroBubble">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenConejoDemon">
+        <div class="lab-icon">😈</div>
+        <h3>Conejo demoníaco</h3>
+        <p class="lab-detail" id="labGenConejoDemonDetail"></p>
+        <p class="lab-level-tag" id="labGenConejoDemonCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenConejoDemon">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenRoboGorila">
+        <div class="lab-icon">🦍</div>
+        <h3>Robo gorila destructor de mundos</h3>
+        <p class="lab-detail" id="labGenRoboGorilaDetail"></p>
+        <p class="lab-level-tag" id="labGenRoboGorilaCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenRoboGorila">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenDevora">
+        <div class="lab-icon">🪐</div>
+        <h3>Devora planetas</h3>
+        <p class="lab-detail" id="labGenDevoraDetail"></p>
+        <p class="lab-level-tag" id="labGenDevoraCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenDevora">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenLeonCielo">
+        <div class="lab-icon">🦁</div>
+        <h3>León del cielo</h3>
+        <p class="lab-detail" id="labGenLeonCieloDetail"></p>
+        <p class="lab-level-tag" id="labGenLeonCieloCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenLeonCielo">Clonar criatura</button>
+      </article>
+      <article class="lab-card lab-genesis" id="labGenOjoAngelical">
+        <div class="lab-icon">👁️</div>
+        <h3>Ojo angelical</h3>
+        <p class="lab-detail" id="labGenOjoAngelicalDetail"></p>
+        <p class="lab-level-tag" id="labGenOjoAngelicalCost"></p>
+        <button type="button" class="btn-genesis" id="btnGenOjoAngelical">Clonar criatura</button>
+      </article>
+    </div>
+  </div>
+
+  <div class="footer-actions">
+    <button type="button" class="btn-tour" id="btnTour">🚌 ¡Visita rápida! (+15 ✦ · 20 s)</button>
+    <button type="button" class="btn-tour ghost" id="btnSave">💾 Guardar partida</button>
+  </div>
+  </div>
+
+  <div id="toast" role="status"></div>
+
+  <div id="dnaDigOverlay" class="dna-dig-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="dnaDigTitle">
+    <div class="dna-dig-panel">
+      <h3 id="dnaDigTitle">⛏️ Excavación 4 × 6</h3>
+      <p class="dig-sub">
+        Ya pagaste <strong>20 ✦</strong> de equipo. Solo tenés <strong id="dnaShovelRemain">6</strong> palas.
+        Toca las piedras hasta gastar todas o mirá cuántos ADN descubriste.
+      </p>
+      <div id="dnaDigGrid" class="dna-dig-grid" aria-live="polite"></div>
+      <p class="dig-hits-line" id="dnaDigStatus"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var SAVE_KEY = "zooExóticoGuardado_v1";
+
+      var SPECIES = [
+        {
+          id: "draco",
+          name: "Escamito esmeralda",
+          tag: "Sabana térmica",
+          desc: "Le gusta dormir pegado al cristal templado del recinto.",
+          price: 0,
+          baseIncome: 1.8
+        },
+        {
+          id: "nube",
+          name: "Leviantina aérea",
+          tag: "Domo de vapor",
+          desc: "Flota mejor si el aire lleva una pizca de sal marina.",
+          price: 95,
+          baseIncome: 3.8
+        },
+        {
+          id: "bosque",
+          name: "Astado suave",
+          tag: "Glorieta de musgo",
+          desc: "Come brotes de luz; no lo asustes con flash.",
+          price: 240,
+          baseIncome: 7.2
+        },
+        {
+          id: "ave",
+          name: "Plumarco iris",
+          tag: "Voladero sur",
+          desc: "Canta en arcoíris solo cuando el público aplaude suave.",
+          price: 520,
+          baseIncome: 14
+        },
+        {
+          id: "cueva",
+          name: "Brilloncito profundo",
+          tag: "Cámara de eco",
+          desc: "Brilla más si contás historias en voz baja.",
+          price: 980,
+          baseIncome: 24
+        },
+        {
+          id: "dragon_rayo",
+          name: "Dragón de rayo",
+          tag: "Descarga aérea",
+          desc: "Surca nubes cargadas dibujando relámpagos. Se alimenta de estática feliz.",
+          createCost: { dna: 318 },
+          baseIncome: 52
+        },
+        {
+          id: "limonoso",
+          name: "Limonoso ácido",
+          tag: "Gotas corrosivas",
+          desc: "Cítrico vivo que despide microchispas. No pongas muebles de madera cerca.",
+          createCost: { dna: 128 },
+          baseIncome: 34
+        },
+        {
+          id: "esponjoso",
+          name: "Esponjoso ancestral",
+          tag: "Reef fosilizado",
+          desc: "Filtra el estrés ambiental como una esponja de arrecife en versión caricatura.",
+          createCost: { dna: 205 },
+          baseIncome: 39
+        },
+        {
+          id: "oso_fuego",
+          name: "Oso de fuego",
+          tag: "Termas y garra",
+          desc: "Pelo térmico; ronronea cuando el público aplaude muy fuerte.",
+          createCost: { dna: 268 },
+          baseIncome: 45
+        },
+        {
+          id: "roboticornio",
+          name: "Roboticornio",
+          tag: "Unidad emplumada Mk.1",
+          desc: "Mítico unicornio servo mecánico: calcula rutas óptimas para fugarse del recinto.",
+          createCost: { dna: 395 },
+          baseIncome: 60
+        },
+        {
+          id: "robo_caca",
+          name: "Robo caca",
+          tag: "Unidad orgánico‑metálica",
+          desc: "Prototipo de broma seria: caparazón férreo, núcleo marrón amistoso y LEDs que parpadean ok.",
+          createCost: { dna: 118 },
+          baseIncome: 38
+        },
+        {
+          id: "ajolote_celestial",
+          name: "Ajolote celestial",
+          tag: "Estanque astral",
+          desc: "Branquias de luz y un halo chiquito: duerme bajo constelaciones de neon.",
+          createCost: { dna: 148, coins: 540 },
+          baseIncome: 52
+        },
+        {
+          id: "serpiente_hidra",
+          name: "Serpiente hidra",
+          tag: "Tres cabezas charlatanas",
+          desc: "Cada cabeza opina distinto sobre el menú; comparten un solo estómago de éter.",
+          createCost: { dna: 172, coins: 680 },
+          baseIncome: 58
+        },
+        {
+          id: "mecha_ceratops",
+          name: "Mecha ceratops",
+          tag: "Blindaje cretácico",
+          desc: "Cuernos de titanio pulido y altavoces de subwoofer que retumban todo el hábitat.",
+          createCost: { dna: 198, coins: 820 },
+          baseIncome: 64
+        },
+        {
+          id: "perro_burbuja",
+          name: "Perro burbuja",
+          tag: "Ladrido espumoso",
+          desc: "Corre dejando un rastro de esferas de jabón que huelen a pasto mojado.",
+          createCost: { dna: 225, coins: 960 },
+          baseIncome: 70
+        },
+        {
+          id: "conejo_demon",
+          name: "Conejo demoníaco",
+          tag: "Zanahoria infernal",
+          desc: "Orejas larguísimas y cuernitos de envidia; salta en círculos de fuego amistoso.",
+          createCost: { dna: 252, coins: 1120 },
+          baseIncome: 76
+        },
+        {
+          id: "robo_gorila",
+          name: "Robo gorila destructor de mundos",
+          tag: "Unidad pesada Ω",
+          desc: "Golpea el suelo para que suene el himno del parque en versión metal.",
+          createCost: { dna: 298, coins: 1420 },
+          baseIncome: 84
+        },
+        {
+          id: "devora_planetas",
+          name: "Devora planetas",
+          tag: "Anillo cósmico",
+          desc: "Traga modelos a escala de sistema solar; escupe anillos de Saturno como dulces.",
+          createCost: { dna: 355, coins: 1750 },
+          baseIncome: 96
+        },
+        {
+          id: "leon_del_cielo",
+          name: "León del cielo",
+          tag: "Melena cirro",
+          desc: "Melena hecha de nubes ligeras; ruge y suelta chispas doradas que no queman.",
+          createCost: { dna: 178, coins: 640 },
+          baseIncome: 71
+        },
+        {
+          id: "ojo_angelical",
+          name: "Ojo angelical",
+          tag: "Vigía seráfico",
+          desc: "Un solo ojo alado con pupila de luz: parpadea en cámara lenta y bendice los recintos vecinos.",
+          createCost: { dna: 205, coins: 820 },
+          baseIncome: 78
+        }
+      ];
+
+      var DNA_EXPEDITION_COST = 20;
+      var DNA_EXPEDITION_COOLDOWN_MS = 25000;
+
+      var DIG_COLS = 4;
+      var DIG_ROWS = 6;
+      var DIG_CELL_TOTAL = DIG_COLS * DIG_ROWS;
+      var DIG_MAX_SHOVELS = 6;
+      var DIG_HIDDEN_DNA_SLOTS = 7;
+
+      var digSession = null;
+
+      function genesisCoinCost(cc) {
+        if (!cc || typeof cc !== "object") return 0;
+        return typeof cc.coins === "number" ? cc.coins : 0;
+      }
+
+      function isGenesisSpecies(sp) {
+        return !!(sp && sp.createCost && typeof sp.createCost.dna === "number");
+      }
+
+      var GENESIS_UI = [
+        { sid: "dragon_rayo", card: "labGenDragonRayo", detail: "labGenDragonRayoDetail", cost: "labGenDragonRayoCost", btn: "btnGenDragonRayo" },
+        { sid: "limonoso", card: "labGenLimonoso", detail: "labGenLimonosoDetail", cost: "labGenLimonosoCost", btn: "btnGenLimonoso" },
+        { sid: "esponjoso", card: "labGenEsponjoso", detail: "labGenEsponjosoDetail", cost: "labGenEsponjosoCost", btn: "btnGenEsponjoso" },
+        { sid: "oso_fuego", card: "labGenOsoFuego", detail: "labGenOsoFuegoDetail", cost: "labGenOsoFuegoCost", btn: "btnGenOsoFuego" },
+        { sid: "roboticornio", card: "labGenRoboticornio", detail: "labGenRoboticornioDetail", cost: "labGenRoboticornioCost", btn: "btnGenRoboticornio" },
+        { sid: "robo_caca", card: "labGenRoboCaca", detail: "labGenRoboCacaDetail", cost: "labGenRoboCacaCost", btn: "btnGenRoboCaca" },
+        { sid: "ajolote_celestial", card: "labGenAjolote", detail: "labGenAjoloteDetail", cost: "labGenAjoloteCost", btn: "btnGenAjolote" },
+        { sid: "serpiente_hidra", card: "labGenHidra", detail: "labGenHidraDetail", cost: "labGenHidraCost", btn: "btnGenHidra" },
+        { sid: "mecha_ceratops", card: "labGenCeratops", detail: "labGenCeratopsDetail", cost: "labGenCeratopsCost", btn: "btnGenCeratops" },
+        { sid: "perro_burbuja", card: "labGenPerroBubble", detail: "labGenPerroBubbleDetail", cost: "labGenPerroBubbleCost", btn: "btnGenPerroBubble" },
+        { sid: "conejo_demon", card: "labGenConejoDemon", detail: "labGenConejoDemonDetail", cost: "labGenConejoDemonCost", btn: "btnGenConejoDemon" },
+        { sid: "robo_gorila", card: "labGenRoboGorila", detail: "labGenRoboGorilaDetail", cost: "labGenRoboGorilaCost", btn: "btnGenRoboGorila" },
+        { sid: "devora_planetas", card: "labGenDevora", detail: "labGenDevoraDetail", cost: "labGenDevoraCost", btn: "btnGenDevora" },
+        { sid: "leon_del_cielo", card: "labGenLeonCielo", detail: "labGenLeonCieloDetail", cost: "labGenLeonCieloCost", btn: "btnGenLeonCielo" },
+        { sid: "ojo_angelical", card: "labGenOjoAngelical", detail: "labGenOjoAngelicalDetail", cost: "labGenOjoAngelicalCost", btn: "btnGenOjoAngelical" }
+      ];
+
+      function getSpeciesById(id) {
+        for (var gs = 0; gs < SPECIES.length; gs++) {
+          if (SPECIES[gs].id === id) return SPECIES[gs];
+        }
+        return null;
+      }
+
+      var LAB_SYNTH_MAX = 5;
+      var LAB_ZEN_MAX = 4;
+      var LAB_MEGA_MAX = 3;
+      var LAB_SYNTH_COSTS = [260, 480, 750, 1050, 1400];
+      var LAB_ZEN_COSTS = [290, 520, 800, 1100];
+      var LAB_MEGA_COSTS = [310, 580, 900];
+
+      var state = {
+        coins: 45,
+        owned: {},
+        tourReadyAt: 0,
+        dna: 0,
+        dnaExpeditionReadyAt: 0,
+        lab: {
+          synth: 0,
+          zen: 0,
+          megafone: 0
+        }
+      };
+
+      function ensureLab() {
+        if (!state.lab || typeof state.lab !== "object") {
+          state.lab = { synth: 0, zen: 0, megafone: 0 };
+        }
+        if (typeof state.lab.synth !== "number") state.lab.synth = 0;
+        if (typeof state.lab.zen !== "number") state.lab.zen = 0;
+        if (typeof state.lab.megafone !== "number") state.lab.megafone = 0;
+        return state.lab;
+      }
+
+      function labSynthMultiplier() {
+        var lv = Math.min(LAB_SYNTH_MAX, Math.max(0, ensureLab().synth));
+        return 1 + 0.09 * lv;
+      }
+
+      function labDecayFactor() {
+        var lv = Math.min(LAB_ZEN_MAX, Math.max(0, ensureLab().zen));
+        var f = 1 - 0.11 * lv;
+        return Math.max(0.62, f);
+      }
+
+      function feedHappinessBoost() {
+        var lv = Math.min(LAB_ZEN_MAX, Math.max(0, ensureLab().zen));
+        return 38 + lv * 3;
+      }
+
+      function tourBonusCoins() {
+        var lv = Math.min(LAB_MEGA_MAX, Math.max(0, ensureLab().megafone));
+        return 15 + lv * 4;
+      }
+
+      function isParkTabActive() {
+        var vp = document.getElementById("viewPark");
+        return vp && !vp.classList.contains("hidden");
+      }
+
+      var coinsEl = document.getElementById("coins");
+      var incomeTotalEl = document.getElementById("incomeTotal");
+      var deckEl = document.getElementById("deck");
+      var cageViewport = document.getElementById("cageViewport");
+      var cagePageLabel = document.getElementById("cagePageLabel");
+      var toastEl = document.getElementById("toast");
+      var btnTour = document.getElementById("btnTour");
+      var btnSave = document.getElementById("btnSave");
+
+      var carouselPage = 0;
+      var cageResizeTimer = null;
+
+      function maxCarouselPage() {
+        return Math.max(0, Math.ceil(SPECIES.length / 2) - 1);
+      }
+
+      function updateCagePageLabel() {
+        if (!cagePageLabel) return;
+        var total = maxCarouselPage() + 1;
+        cagePageLabel.textContent = "Pasillo " + (carouselPage + 1) + " · " + total + " en el recorrido";
+      }
+
+      function applyCarouselLayout() {
+        if (!cageViewport || !deckEl) return;
+        var W = cageViewport.offsetWidth;
+        if (W < 40) return;
+        var gap = 22;
+        var cw = Math.max(220, Math.floor((W - gap) / 2));
+        var cards = deckEl.querySelectorAll("article.card");
+        for (var ci = 0; ci < cards.length; ci++) {
+          cards[ci].style.flex = "0 0 " + cw + "px";
+          cards[ci].style.width = cw + "px";
+          cards[ci].style.minWidth = cw + "px";
+          cards[ci].style.maxWidth = cw + "px";
+        }
+        var maxP = maxCarouselPage();
+        if (carouselPage > maxP) carouselPage = maxP;
+        if (carouselPage < 0) carouselPage = 0;
+        deckEl.style.transform = "translateX(" + (-carouselPage * W) + "px)";
+        updateCagePageLabel();
+      }
+
+      function goCarousel(delta) {
+        var maxP = maxCarouselPage();
+        if (maxP === 0 && delta !== 0) return;
+        carouselPage += delta;
+        if (carouselPage < 0) carouselPage = 0;
+        if (carouselPage > maxP) carouselPage = maxP;
+        applyCarouselLayout();
+      }
+
+      window.addEventListener("resize", function () {
+        clearTimeout(cageResizeTimer);
+        cageResizeTimer = setTimeout(applyCarouselLayout, 90);
+      });
+
+      window.addEventListener("keydown", function (ev) {
+        if (!isParkTabActive()) return;
+        if (ev.key === "ArrowRight") {
+          ev.preventDefault();
+          goCarousel(1);
+        } else if (ev.key === "ArrowLeft") {
+          ev.preventDefault();
+          goCarousel(-1);
+        }
+      });
+
+      var toastTimer = null;
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toastEl.classList.remove("show");
+        }, 2400);
+      }
+
+      function load() {
+        try {
+          var raw = localStorage.getItem(SAVE_KEY);
+          if (!raw) return;
+          var o = JSON.parse(raw);
+          if (typeof o.coins === "number") state.coins = o.coins;
+          if (o.owned && typeof o.owned === "object") state.owned = o.owned;
+          if (typeof o.tourReadyAt === "number") state.tourReadyAt = o.tourReadyAt;
+          ensureLab();
+          if (o.lab && typeof o.lab === "object") {
+            state.lab.synth = Math.min(LAB_SYNTH_MAX, Math.max(0, parseInt(o.lab.synth, 10) || 0));
+            state.lab.zen = Math.min(LAB_ZEN_MAX, Math.max(0, parseInt(o.lab.zen, 10) || 0));
+            state.lab.megafone = Math.min(LAB_MEGA_MAX, Math.max(0, parseInt(o.lab.megafone, 10) || 0));
+          }
+          if (typeof o.dna === "number") state.dna = Math.max(0, o.dna);
+          if (typeof o.dnaExpeditionReadyAt === "number") state.dnaExpeditionReadyAt = o.dnaExpeditionReadyAt;
+        } catch (e) {}
+      }
+
+      function save() {
+        try {
+          ensureLab();
+          localStorage.setItem(
+            SAVE_KEY,
+            JSON.stringify({
+              coins: state.coins,
+              owned: state.owned,
+              tourReadyAt: state.tourReadyAt,
+              lab: {
+                synth: state.lab.synth,
+                zen: state.lab.zen,
+                megafone: state.lab.megafone
+              },
+              dna: state.dna,
+              dnaExpeditionReadyAt: state.dnaExpeditionReadyAt
+            })
+          );
+          toast("¡Partida guardada — no se extinguirá este navegador!");
+        } catch (e) {
+          toast("No se pudo guardar (memoria o permisos).");
+        }
+      }
+
+      function ensureOwned(id) {
+        if (!state.owned[id]) {
+          state.owned[id] = {
+            happiness: 100,
+            feedReadyAt: 0
+          };
+        }
+        return state.owned[id];
+      }
+
+      function happinessMultiplier(h) {
+        return 0.35 + (h / 100) * 0.85;
+      }
+
+      function passivePerSecond() {
+        var total = 0;
+        for (var i = 0; i < SPECIES.length; i++) {
+          var s = SPECIES[i];
+          if (!state.owned[s.id]) continue;
+          var o = state.owned[s.id];
+          total += s.baseIncome * happinessMultiplier(o.happiness);
+        }
+        return total * labSynthMultiplier();
+      }
+
+      function formatNum(n) {
+        if (n >= 1000) return n.toFixed(0);
+        if (n >= 100) return n.toFixed(1);
+        return n.toFixed(2);
+      }
+
+      function speciesName(id) {
+        for (var i = 0; i < SPECIES.length; i++) {
+          if (SPECIES[i].id === id) return SPECIES[i].name;
+        }
+        return "";
+      }
+
+      function roundRectPoly(ctx, x, y, wid, hei, r) {
+        r = Math.min(r, wid / 2, hei / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + wid - r, y);
+        ctx.quadraticCurveTo(x + wid, y, x + wid, y + r);
+        ctx.lineTo(x + wid, y + hei - r);
+        ctx.quadraticCurveTo(x + wid, y + hei, x + wid - r, y + hei);
+        ctx.lineTo(x + r, y + hei);
+        ctx.quadraticCurveTo(x, y + hei, x, y + hei - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      function radialBlob(ctx, x, y, r0, r1, cInner, cOuter) {
+        var rg = ctx.createRadialGradient(x, y, r0, x, y, r1);
+        rg.addColorStop(0, cInner);
+        rg.addColorStop(1, cOuter);
+        ctx.fillStyle = rg;
+      }
+
+      function groundOval(ctx, cx, gy, rx, ry) {
+        radialBlob(ctx, cx, gy + 2, 0, ry * 2.1, "rgba(32,92,74,0.34)", "rgba(40,75,62,0)");
+        ctx.beginPath();
+        ctx.ellipse(cx, gy + 4, rx, ry * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = 0.32;
+        var gl = ctx.createRadialGradient(cx - rx * 0.42, gy - ry * 0.05, 0, cx, gy + 1, rx * 1.05);
+        gl.addColorStop(0, "rgba(255,255,255,0.5)");
+        gl.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = gl;
+        ctx.beginPath();
+        ctx.ellipse(cx, gy + 2, rx * 0.9, ry * 0.52, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      /* Brillo tipo “lacado” sobre cuerpos; usa el sistema de coordenadas actual (p. ej. dentro de translate de la criatura). */
+      function glossEllipse(ctx, cx, cy, rx, ry, rot, alpha) {
+        ctx.save();
+        ctx.globalAlpha = typeof alpha === "number" ? alpha : 0.26;
+        var g = ctx.createRadialGradient(cx - rx * 0.25, cy - ry * 0.35, 0, cx, cy, Math.max(rx, ry) * 0.92);
+        g.addColorStop(0, "rgba(255,255,255,0.9)");
+        g.addColorStop(0.42, "rgba(255,255,255,0.12)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx * 0.5, ry * 0.48, rot || 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function strokeShape(ctx, col, lw) {
+        ctx.strokeStyle = col;
+        ctx.lineWidth = lw;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+
+      function wobblePt(cx, cy, rx, ry, ang, seed) {
+        var w =
+          1 +
+          Math.sin(ang * 3.7 + seed) * 0.13 +
+          Math.cos(ang * 6.1 + seed * 1.7) * 0.09 +
+          Math.sin(ang * 11 + seed * 0.4) * 0.04;
+        return { x: cx + Math.cos(ang) * rx * w, y: cy + Math.sin(ang) * ry * w };
+      }
+
+      function organicBlob(ctx, cx, cy, rx, ry, seed, n) {
+        n = n || 20;
+        seed = seed || 0;
+        var pts = [];
+        var i;
+        for (i = 0; i < n; i++) {
+          pts.push(wobblePt(cx, cy, rx, ry, (i / n) * Math.PI * 2, seed));
+        }
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (i = 0; i < n; i++) {
+          var p0 = pts[(i - 1 + n) % n];
+          var p2 = pts[(i + 1) % n];
+          var p3 = pts[(i + 2) % n];
+          var cp1x = p2.x - (p3.x - p0.x) / 8;
+          var cp1y = p2.y - (p3.y - p0.y) / 8;
+          var cp2x = p2.x + (p3.x - p0.x) / 8;
+          var cp2y = p2.y + (p3.y - p0.y) / 8;
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+        ctx.closePath();
+      }
+
+      function fillOrganic(ctx, cx, cy, rx, ry, seed, fillStyle, strokeCol, lw) {
+        organicBlob(ctx, cx, cy, rx, ry, seed);
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+        if (strokeCol) {
+          organicBlob(ctx, cx, cy, rx, ry, seed);
+          strokeShape(ctx, strokeCol, lw || 2);
+        }
+      }
+
+      function organicGloss(ctx, cx, cy, rx, ry, seed, alpha) {
+        ctx.save();
+        ctx.globalAlpha = typeof alpha === "number" ? alpha : 0.24;
+        organicBlob(ctx, cx - rx * 0.16, cy - ry * 0.24, rx * 0.44, ry * 0.4, seed + 2.1, 14);
+        var g = ctx.createRadialGradient(cx - rx * 0.2, cy - ry * 0.28, 0, cx, cy, rx);
+        g.addColorStop(0, "rgba(255,255,255,0.9)");
+        g.addColorStop(0.55, "rgba(255,255,255,0.1)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function softCloudMass(ctx, cx, cy, rx, ry, seed, fillStyle) {
+        var lumps = [
+          { x: cx - rx * 0.42, y: cy + ry * 0.08, rx: rx * 0.36, ry: ry * 0.32 },
+          { x: cx + rx * 0.38, y: cy + ry * 0.04, rx: rx * 0.4, ry: ry * 0.34 },
+          { x: cx - rx * 0.05, y: cy - ry * 0.38, rx: rx * 0.46, ry: ry * 0.38 },
+          { x: cx + rx * 0.52, y: cy - ry * 0.12, rx: rx * 0.26, ry: ry * 0.24 }
+        ];
+        ctx.fillStyle = fillStyle;
+        var lb;
+        for (lb = 0; lb < lumps.length; lb++) {
+          organicBlob(ctx, lumps[lb].x, lumps[lb].y, lumps[lb].rx, lumps[lb].ry, seed + lb * 1.4, 16);
+          ctx.fill();
+        }
+      }
+
+      function organicEye(ctx, x, y, r, irisCol, pupilCol) {
+        fillOrganic(ctx, x, y, r, r * 0.94, 0.7, "#fffef8", "rgba(30,40,35,0.2)", 1);
+        fillOrganic(ctx, x + r * 0.06, y + r * 0.04, r * 0.52, r * 0.48, 1.1, irisCol || "#1a4a38", null, 0);
+        fillOrganic(ctx, x + r * 0.1, y + r * 0.06, r * 0.2, r * 0.18, 2.2, pupilCol || "#091410", null, 0);
+        ctx.fillStyle = "rgba(255,255,255,0.92)";
+        organicBlob(ctx, x + r * 0.2, y - r * 0.14, r * 0.11, r * 0.09, 3.3, 8);
+        ctx.fill();
+      }
+
+      function fluffyRing(ctx, cx, cy, rx, ry, seed, color, width, count) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        count = count || 30;
+        var fr;
+        for (fr = 0; fr < count; fr++) {
+          var a = (fr / count) * Math.PI * 2 + seed;
+          var p = wobblePt(cx, cy, rx, ry, a, seed + fr * 0.12);
+          var len = 9 + (fr % 5) * 2.8;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.quadraticCurveTo(
+            p.x + Math.cos(a + 0.55) * len * 0.55,
+            p.y + Math.sin(a + 0.55) * len * 0.55,
+            p.x + Math.cos(a + 1.05) * len,
+            p.y + Math.sin(a + 1.05) * len
+          );
+          ctx.stroke();
+        }
+      }
+
+      function organicCurveBody(ctx, pts, fillStyle, strokeCol, lw) {
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        var pi;
+        for (pi = 1; pi < pts.length; pi++) {
+          var prev = pts[pi - 1];
+          var curr = pts[pi];
+          var cpx = (prev.x + curr.x) / 2 + (curr.y - prev.y) * 0.08;
+          var cpy = (prev.y + curr.y) / 2 - (curr.x - prev.x) * 0.08;
+          ctx.quadraticCurveTo(prev.x, prev.y, cpx, cpy);
+        }
+        ctx.quadraticCurveTo(pts[pts.length - 1].x, pts[pts.length - 1].y, pts[0].x, pts[0].y);
+        ctx.closePath();
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+        if (strokeCol) {
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (pi = 1; pi < pts.length; pi++) {
+            prev = pts[pi - 1];
+            curr = pts[pi];
+            cpx = (prev.x + curr.x) / 2 + (curr.y - prev.y) * 0.08;
+            cpy = (prev.y + curr.y) / 2 - (curr.x - prev.x) * 0.08;
+            ctx.quadraticCurveTo(prev.x, prev.y, cpx, cpy);
+          }
+          ctx.quadraticCurveTo(pts[pts.length - 1].x, pts[pts.length - 1].y, pts[0].x, pts[0].y);
+          ctx.closePath();
+          strokeShape(ctx, strokeCol, lw || 2);
+        }
+      }
+
+      function organicSnakeStroke(ctx, x0, y0, x1, y1, x2, y2, x3, y3, wOuter, wInner, cOuter, cInner) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = cOuter;
+        ctx.lineWidth = wOuter;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+        ctx.stroke();
+        ctx.strokeStyle = cInner;
+        ctx.lineWidth = wInner;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+        ctx.stroke();
+      }
+
+      function drawCreatureShape(ctx, id, w, h) {
+        var cx = w * 0.5;
+        var cy = h * 0.5;
+        ctx.clearRect(0, 0, w, h);
+
+        var bgRg = ctx.createRadialGradient(cx, cy * 0.75, Math.min(w, h) * 0.06, cx, cy, Math.max(w, h) * 0.95);
+        bgRg.addColorStop(0, "#f9fffb");
+        bgRg.addColorStop(0.38, "#e3f7ef");
+        bgRg.addColorStop(0.78, "#bfe8d9");
+        bgRg.addColorStop(1, "#8ecbb8");
+        ctx.fillStyle = bgRg;
+        ctx.fillRect(0, 0, w, h);
+        ctx.save();
+        ctx.globalAlpha = 0.14;
+        var grain = ctx.createLinearGradient(0, 0, w, h);
+        grain.addColorStop(0, "rgba(56,161,148,0.25)");
+        grain.addColorStop(1, "rgba(31,117,138,0.15)");
+        ctx.fillStyle = grain;
+        ctx.fillRect(0, 0, w, h);
+        ctx.restore();
+        var vig = ctx.createRadialGradient(cx, cy, Math.min(w, h) * 0.15, cx, cy, Math.max(w, h) * 0.78);
+        vig.addColorStop(0, "rgba(255,255,255,0)");
+        vig.addColorStop(1, "rgba(12,74,74,0.13)");
+        ctx.fillStyle = vig;
+        ctx.fillRect(0, 0, w, h);
+
+        if (id === "draco") {
+          ctx.save();
+          ctx.translate(cx, cy + 4);
+          groundOval(ctx, 8, 48, 100, 18);
+          ctx.rotate(-0.12);
+          organicCurveBody(
+            ctx,
+            [
+              { x: -82, y: 12 },
+              { x: -98, y: 32 },
+              { x: -78, y: 40 },
+              { x: -38, y: 36 },
+              { x: -6, y: 26 },
+              { x: 4, y: 8 },
+              { x: -24, y: -26 },
+              { x: -58, y: -36 }
+            ],
+            (function () {
+              var tg = ctx.createLinearGradient(-90, 0, 20, 24);
+              tg.addColorStop(0, "#1a6849");
+              tg.addColorStop(1, "#2ebb8f");
+              return tg;
+            })(),
+            "rgba(10,55,42,0.45)",
+            2.5
+          );
+          var bodyG = ctx.createLinearGradient(-40, -20, 90, 30);
+          bodyG.addColorStop(0, "#238b66");
+          bodyG.addColorStop(0.5, "#39b88a");
+          bodyG.addColorStop(1, "#1f6f52");
+          fillOrganic(ctx, 14, 6, 68, 34, 1.2, bodyG, "rgba(8,55,42,0.5)", 2.5);
+          organicGloss(ctx, 14, 6, 68, 34, 1.2, 0.22);
+          ctx.fillStyle = "#e8c766";
+          ctx.strokeStyle = "rgba(80,55,15,0.35)";
+          ctx.lineWidth = 2;
+          for (var k = -1; k < 7; k++) {
+            var px = -28 + k * 16;
+            ctx.beginPath();
+            ctx.moveTo(px, -20);
+            ctx.quadraticCurveTo(px + 10, -42, px + 16, -18);
+            ctx.quadraticCurveTo(px + 6, -30, px, -20);
+            ctx.fill();
+            ctx.stroke();
+          }
+          var headG = ctx.createRadialGradient(52, -8, 4, 58, -2, 22);
+          headG.addColorStop(0, "#4dd4a8");
+          headG.addColorStop(1, "#1d7a58");
+          fillOrganic(ctx, 58, -2, 24, 22, 2.4, headG, "rgba(6,50,38,0.55)", 2);
+          organicGloss(ctx, 58, -2, 22, 20, 2.4, 0.28);
+          ctx.beginPath();
+          ctx.moveTo(74, -10);
+          ctx.bezierCurveTo(102, -6, 112, 8, 84, 16);
+          ctx.bezierCurveTo(72, 12, 66, 0, 74, -10);
+          ctx.closePath();
+          ctx.fillStyle = "#f0d98a";
+          ctx.fill();
+          strokeShape(ctx, "rgba(90,65,18,0.4)", 1.5);
+          organicEye(ctx, 52, -6, 9, "#1a4a38", "#0d2520");
+          function foot(fx, fy) {
+            fillOrganic(ctx, fx, fy + 4, 10, 6, fx * 0.3, "#184233", null, 0);
+            ctx.beginPath();
+            ctx.moveTo(fx + 10, fy + 8);
+            ctx.quadraticCurveTo(fx + 20, fy + 2, fx + 24, fy + 10);
+            ctx.quadraticCurveTo(fx + 16, fy + 8, fx + 10, fy + 8);
+            ctx.closePath();
+            ctx.fillStyle = "#e8c766";
+            ctx.fill();
+          }
+          foot(-12, 32);
+          foot(22, 36);
+          foot(52, 32);
+          foot(82, 28);
+          ctx.restore();
+        } else if (id === "nube") {
+          ctx.save();
+          ctx.translate(cx, cy - 2);
+          groundOval(ctx, 6, 78, 88, 16);
+          fillOrganic(ctx, 0, 28, 58, 48, 0.5, "rgba(200,170,235,0.35)", null, 0);
+          var dome = ctx.createRadialGradient(-8, -10, 8, 0, 4, 52);
+          dome.addColorStop(0, "#f0e4ff");
+          dome.addColorStop(0.35, "#d4b6ef");
+          dome.addColorStop(0.85, "#9b6ec8");
+          dome.addColorStop(1, "#6b4195");
+          softCloudMass(ctx, -2, 0, 58, 42, 1.1, dome);
+          organicBlob(ctx, -2, 0, 58, 42, 1.1, 18);
+          strokeShape(ctx, "rgba(60,35,95,0.45)", 2.5);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.38;
+          fillOrganic(ctx, -4, -8, 44, 38, 2.2, "rgba(255,255,255,0.55)", null, 0);
+          ctx.restore();
+          organicEye(ctx, -8, -2, 11, "#3a2540", "#2a2540");
+          organicEye(ctx, 18, -4, 10, "#3a2540", "#2a2540");
+          fillOrganic(ctx, -12, -10, 3.5, 3, 4, "#e8afff", null, 0);
+          fillOrganic(ctx, 12, -12, 3, 2.8, 5, "#e8afff", null, 0);
+          ctx.strokeStyle = "rgba(120,85,175,0.75)";
+          ctx.lineCap = "round";
+          ctx.lineWidth = 2.2;
+          for (var t = 0; t < 8; t++) {
+            var ang = (t / 8) * Math.PI * 2 + 0.25;
+            var ax = Math.cos(ang) * 10;
+            var ay = 22 + Math.sin(ang) * 5;
+            ctx.beginPath();
+            ctx.moveTo(ax, ay);
+            ctx.quadraticCurveTo(ax * 1.8 + 12, ay + 28, ax * 2.2 + 6, 78);
+            ctx.stroke();
+            fillOrganic(ctx, ax * 2.2 + 6, 78, 3.5, 3.2, t, "rgba(255,200,255,0.9)", null, 0);
+          }
+          ctx.restore();
+        } else if (id === "bosque") {
+          ctx.save();
+          ctx.translate(cx, cy + 6);
+          groundOval(ctx, 0, 56, 95, 16);
+
+          ctx.strokeStyle = "rgba(70,50,35,0.55)";
+          ctx.lineWidth = 3;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(-22, -58);
+          ctx.lineTo(-18, -78);
+          ctx.lineTo(-10, -62);
+          ctx.moveTo(18, -60);
+          ctx.lineTo(24, -82);
+          ctx.lineTo(32, -64);
+          ctx.stroke();
+
+          ctx.fillStyle = "#5c4228";
+          ctx.beginPath();
+          ctx.arc(-14, -70, 4, 0, Math.PI * 2);
+          ctx.arc(26, -74, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(0, -58);
+          ctx.lineTo(-6, -88);
+          ctx.lineTo(6, -88);
+          ctx.closePath();
+          ctx.fillStyle = "#c49a62";
+          ctx.fill();
+          strokeShape(ctx, "rgba(65,42,28,0.35)", 1.5);
+
+          var earL = [-32, -40, -52, -65, -18, -52];
+          var earR = [32, -40, 52, -65, 18, -52];
+          ctx.fillStyle = "#c8966b";
+          ctx.beginPath();
+          ctx.moveTo(earL[0], earL[1]);
+          ctx.lineTo(earL[2], earL[3]);
+          ctx.lineTo(earL[4], earL[5]);
+          ctx.closePath();
+          ctx.moveTo(earR[0], earR[1]);
+          ctx.lineTo(earR[2], earR[3]);
+          ctx.lineTo(earR[4], earR[5]);
+          ctx.closePath();
+          ctx.fill();
+          strokeShape(ctx, "rgba(80,52,38,0.4)", 1.5);
+
+          ctx.beginPath();
+          ctx.arc(0, -32, 20, 0, Math.PI * 2);
+          var mug = ctx.createRadialGradient(-5, -40, 3, 0, -28, 24);
+          mug.addColorStop(0, "#e8cbb0");
+          mug.addColorStop(1, "#9d734f");
+          ctx.fillStyle = mug;
+          ctx.fill();
+          strokeShape(ctx, "rgba(70,42,28,0.45)", 2);
+
+          ctx.fillStyle = "#7a5238";
+          ctx.beginPath();
+          ctx.ellipse(14, -28, 10, 7, 0.2, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(-6, -36, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#2a1a12";
+          ctx.beginPath();
+          ctx.arc(-4, -35, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+
+          var fur = ctx.createLinearGradient(-40, -10, 50, 40);
+          fur.addColorStop(0, "#b8956e");
+          fur.addColorStop(0.5, "#9c7652");
+          fur.addColorStop(1, "#6d4d35");
+          ctx.fillStyle = fur;
+          roundRectPoly(ctx, -38, -18, 76, 52, 14);
+          ctx.fill();
+          strokeShape(ctx, "rgba(55,38,28,0.4)", 2);
+          glossEllipse(ctx, -4, 2, 56, 36, 0.05, 0.16);
+
+          ctx.fillStyle = "rgba(255,230,200,0.35)";
+          roundRectPoly(ctx, -22, -6, 44, 28, 10);
+          ctx.fill();
+
+          ctx.fillStyle = "#8b6a4a";
+          ctx.fillRect(-30, 22, 12, 36);
+          ctx.fillRect(18, 22, 12, 36);
+          ctx.fillStyle = "#4a3323";
+          roundRectPoly(ctx, -32, 52, 16, 6, 2);
+          roundRectPoly(ctx, 18, 52, 16, 6, 2);
+          ctx.fill();
+
+          ctx.fillStyle = "rgba(100,155,92,0.85)";
+          ctx.beginPath();
+          ctx.arc(46, -4, 12, 0, Math.PI * 2);
+          ctx.arc(54, 2, 8, 0, Math.PI * 2);
+          ctx.arc(52, -8, 6, 0, Math.PI * 2);
+          ctx.fill();
+          strokeShape(ctx, "rgba(48,92,52,0.45)", 1.5);
+
+          ctx.restore();
+        } else if (id === "ave") {
+          ctx.save();
+          ctx.translate(cx, cy + 2);
+          groundOval(ctx, 4, 68, 90, 14);
+
+          var wingHue = "#e85d75";
+          for (var layer = 0; layer < 3; layer++) {
+            ctx.fillStyle = layer === 0 ? "#ffc4ce" : layer === 1 ? wingHue : "#b0354a";
+            ctx.globalAlpha = 0.92 - layer * 0.06;
+            var spread = 48 + layer * 18;
+            var lift = -8 - layer * 6;
+            ctx.beginPath();
+            ctx.moveTo(-15, lift);
+            ctx.lineTo(-spread, -30 - layer * 4);
+            ctx.lineTo(-18, -2 + layer * 3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(15, lift);
+            ctx.lineTo(spread, -30 - layer * 4);
+            ctx.lineTo(18, -2 + layer * 3);
+            ctx.closePath();
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          strokeShape(ctx, "rgba(120,30,48,0.35)", 1.75);
+
+          var tailCols = ["#ff9e6d", "#f4a742", "#d97706"];
+          for (var ti = 0; ti < 3; ti++) {
+            ctx.fillStyle = tailCols[ti];
+            ctx.beginPath();
+            ctx.moveTo(-16 - ti * 5, 18 + ti * 3);
+            ctx.lineTo(-45 - ti * 12, 35 + ti * 6);
+            ctx.lineTo(-12 - ti * 3, 32 + ti * 2);
+            ctx.closePath();
+            ctx.fill();
+          }
+          strokeShape(ctx, "rgba(140,65,24,0.35)", 1.25);
+
+          ctx.beginPath();
+          ctx.arc(4, -2, 34, 0, Math.PI * 2);
+          var torso = ctx.createRadialGradient(-5, -12, 4, 4, -2, 38);
+          torso.addColorStop(0, "#ffe08a");
+          torso.addColorStop(0.45, "#f4b435");
+          torso.addColorStop(1, "#c97812");
+          ctx.fillStyle = torso;
+          ctx.fill();
+          strokeShape(ctx, "rgba(135,72,14,0.45)", 2);
+          glossEllipse(ctx, 4, -2, 34, 34, 0, 0.22);
+
+          ctx.fillStyle = "#ff6b93";
+          for (var c = -1; c <= 1; c++) {
+            ctx.beginPath();
+            ctx.moveTo(c * 6, -42);
+            ctx.lineTo(-4 + c * 6, -58 - Math.abs(c) * 6);
+            ctx.lineTo(4 + c * 6, -46);
+            ctx.closePath();
+            ctx.fill();
+          }
+          strokeShape(ctx, "rgba(145,42,74,0.35)", 1.25);
+
+          ctx.fillStyle = "#ffbe0b";
+          ctx.beginPath();
+          ctx.moveTo(32, -6);
+          ctx.lineTo(52, -2);
+          ctx.lineTo(34, 10);
+          ctx.closePath();
+          ctx.fill();
+          strokeShape(ctx, "rgba(120,82,14,0.45)", 1.5);
+
+          ctx.fillStyle = "#fffaeb";
+          ctx.beginPath();
+          ctx.arc(-2, -10, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(60,42,26,0.25)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.fillStyle = "#1f140c";
+          ctx.beginPath();
+          ctx.arc(0, -8, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(-1.5, -10.5, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = "#9a5a12";
+          ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          ctx.moveTo(6, 28);
+          ctx.lineTo(6, 48);
+          ctx.moveTo(-2, 30);
+          ctx.lineTo(-2, 46);
+          ctx.stroke();
+          ctx.fillStyle = "#e07a08";
+          ctx.beginPath();
+          ctx.moveTo(6, 48);
+          ctx.lineTo(-2, 48);
+          ctx.lineTo(2, 54);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.restore();
+        } else if (id === "cueva") {
+          ctx.save();
+          ctx.translate(cx, cy + 10);
+          groundOval(ctx, 4, 58, 100, 20);
+
+          for (var ri = 6; ri >= 1; ri--) {
+            var alpha = 0.08 + ri * 0.06;
+            ctx.fillStyle =
+              ri % 2 === 0 ? "rgba(95,215,255," + alpha + ")" : "rgba(40,120,210," + alpha + ")";
+            ctx.beginPath();
+            ctx.arc(-4, -4, 8 + ri * 14, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          ctx.ellipse(-2, -2, 54, 48, -0.05, 0, Math.PI * 2);
+          var slug = ctx.createRadialGradient(-20, -30, 6, -2, 0, 60);
+          slug.addColorStop(0, "#3d8098");
+          slug.addColorStop(0.55, "#1a4460");
+          slug.addColorStop(1, "#0c2238");
+          ctx.fillStyle = slug;
+          ctx.fill();
+          strokeShape(ctx, "rgba(10,120,155,0.55)", 2.8);
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          ctx.globalAlpha = 0.45;
+          var biolum = ctx.createRadialGradient(-28, -28, 0, -2, -4, 58);
+          biolum.addColorStop(0, "rgba(180,255,255,0.55)");
+          biolum.addColorStop(0.55, "rgba(80,200,255,0.12)");
+          biolum.addColorStop(1, "rgba(0,80,120,0)");
+          ctx.fillStyle = biolum;
+          ctx.beginPath();
+          ctx.ellipse(-2, -2, 54, 48, -0.05, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          ctx.fillStyle = "rgba(135,243,255,0.5)";
+          ctx.beginPath();
+          ctx.arc(-44, -18, 6, 0, Math.PI * 2);
+          ctx.arc(38, -12, 5, 0, Math.PI * 2);
+          ctx.arc(-8, -38, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#6ef0ff";
+          ctx.strokeStyle = "rgba(180,250,255,0.6)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(0, -48);
+          ctx.lineTo(4, -88);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(4, -92, 14, 0, Math.PI * 2);
+          var lure = ctx.createRadialGradient(-2, -98, 2, 6, -90, 16);
+          lure.addColorStop(0, "#ffffcc");
+          lure.addColorStop(0.35, "#6efaff");
+          lure.addColorStop(1, "rgba(20,140,220,0.4)");
+          ctx.fillStyle = lure;
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "rgba(155,247,255,0.9)";
+          for (var fq = -1; fq <= 1; fq++) {
+            ctx.beginPath();
+            ctx.moveTo(fq * 48, -2);
+            ctx.lineTo(fq * 72, -8);
+            ctx.lineTo(fq * 62, 12);
+            ctx.closePath();
+            ctx.fill();
+          }
+          strokeShape(ctx, "rgba(120,236,255,0.4)", 1.25);
+
+          ctx.fillStyle = "rgba(230,253,255,0.92)";
+          ctx.beginPath();
+          ctx.arc(-18, -6, 13, 0, Math.PI * 2);
+          ctx.arc(22, -4, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(6,46,82,0.45)";
+          ctx.lineWidth = 1.35;
+          ctx.stroke();
+          ctx.fillStyle = "#061220";
+          ctx.beginPath();
+          ctx.arc(-14, -4, 5, 0, Math.PI * 2);
+          ctx.arc(26, -2, 4.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 0.9;
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(-10, -8, 2.4, 0, Math.PI * 2);
+          ctx.arc(30, -6, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          ctx.fillStyle = "#e8fafc";
+          for (var th = -3; th < 5; th++) {
+            ctx.beginPath();
+            ctx.moveTo(-10 + th * 5, 10);
+            ctx.lineTo(-6 + th * 5, 22);
+            ctx.lineTo(-2 + th * 5, 8);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          for (var sp = 0; sp < 7; sp++) {
+            radialBlob(ctx, Math.cos(sp * 0.9 - 1) * 28, Math.sin(sp + 2) * 22, 2, 8, "#8efbff", "rgba(80,215,240,0)");
+            ctx.beginPath();
+            ctx.ellipse(Math.cos(sp * 0.9 - 1) * 38, Math.sin(sp + 2) * 28 + 12, 4, 3, sp * 0.4, 0, Math.PI * 2);
+            ctx.globalAlpha = 0.85;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+
+          ctx.restore();
+        } else if (id === "limonoso") {
+          ctx.save();
+          ctx.translate(cx, cy + 6);
+          groundOval(ctx, 0, 56, 92, 17);
+          ctx.fillStyle = "#22c55e";
+          ctx.beginPath();
+          ctx.moveTo(-48, -52);
+          ctx.lineTo(-58, -76);
+          ctx.lineTo(-26, -62);
+          ctx.closePath();
+          ctx.fill();
+          strokeShape(ctx, "rgba(21,83,45,0.5)", 2);
+          var limG = ctx.createRadialGradient(-18, -18, 6, 4, 10, 58);
+          limG.addColorStop(0, "#fef9c3");
+          limG.addColorStop(0.45, "#fef08a");
+          limG.addColorStop(0.85, "#eab308");
+          limG.addColorStop(1, "#a16207");
+          ctx.fillStyle = limG;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 48, 52, 0, 0, Math.PI * 2);
+          ctx.fill();
+          strokeShape(ctx, "rgba(161,98,7,0.55)", 3);
+          glossEllipse(ctx, -4, -6, 48, 52, -0.1, 0.24);
+          ctx.fillStyle = "rgba(253,224,71,0.8)";
+          ctx.beginPath();
+          ctx.ellipse(-16, -14, 22, 26, -0.35, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#b45309";
+          ctx.beginPath();
+          ctx.arc(28, 22, 10, 0, Math.PI * 2);
+          ctx.fill();
+          for (var ac = 0; ac < 6; ac++) {
+            ctx.globalAlpha = 0.65;
+            ctx.fillStyle = "#4ade80";
+            ctx.beginPath();
+            ctx.arc(56 + ac * 14, 8 - ac * 6, 6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = "#ecfdf5";
+          ctx.beginPath();
+          ctx.arc(-8, -8, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#14532d";
+          ctx.beginPath();
+          ctx.arc(-5, -6, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#eab308";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(-30, 16);
+          ctx.lineTo(-20, -4);
+          ctx.lineTo(-8, 20);
+          ctx.stroke();
+          ctx.restore();
+        } else if (id === "esponjoso") {
+          ctx.save();
+          ctx.translate(cx, cy + 8);
+          groundOval(ctx, -4, 54, 100, 18);
+          roundRectPoly(ctx, -56, -36, 112, 88, 18);
+          var spBg = ctx.createLinearGradient(-40, -40, 60, 50);
+          spBg.addColorStop(0, "#fde68a");
+          spBg.addColorStop(0.5, "#d97706");
+          spBg.addColorStop(1, "#92400e");
+          ctx.fillStyle = spBg;
+          ctx.fill();
+          strokeShape(ctx, "rgba(67,32,13,0.55)", 3);
+          glossEllipse(ctx, -8, -16, 80, 48, -0.04, 0.18);
+          for (var pq = -2; pq < 14; pq++) {
+            ctx.fillStyle = "rgba(120,53,15," + (0.25 + (pq % 4) * 0.06) + ")";
+            ctx.beginPath();
+            ctx.arc(-36 + pq * 12 - (pq % 3) * 4, -16 + pq * 5, 9, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 0.92;
+          ctx.fillStyle = "#fef3c7";
+          ctx.beginPath();
+          ctx.arc(-28, -8, 10, 0, Math.PI * 2);
+          ctx.arc(18, 4, 8, 0, Math.PI * 2);
+          ctx.arc(-8, 16, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = "#fef9c3";
+          ctx.beginPath();
+          ctx.arc(-4, -6, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#78350f";
+          ctx.beginPath();
+          ctx.arc(-2, -4, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(251,146,60,0.9)";
+          ctx.lineWidth = 2;
+          for (var wv = -2; wv <= 8; wv++) {
+            ctx.beginPath();
+            ctx.moveTo(-50 + wv * 10, -34);
+            ctx.quadraticCurveTo(-48 + wv * 10, -48, -44 + wv * 10, -36);
+            ctx.stroke();
+          }
+          ctx.restore();
+        } else if (id === "oso_fuego") {
+          ctx.save();
+          ctx.translate(cx, cy + 10);
+          groundOval(ctx, 2, 58, 98, 16);
+          for (var fq = -1; fq < 9; fq++) {
+            ctx.fillStyle = fq % 2 === 0 ? "rgba(249,115,22,0.85)" : "rgba(239,68,68,0.72)";
+            ctx.beginPath();
+            ctx.moveTo(-60 + fq * 16, -32);
+            ctx.lineTo(-50 + fq * 16 + 14, -60 - fq * 3);
+            ctx.lineTo(-40 + fq * 16 + 6, -28 - fq * 2);
+            ctx.closePath();
+            ctx.fill();
+          }
+          roundRectPoly(ctx, -52, -12, 104, 64, 20);
+          var ob = ctx.createLinearGradient(-30, -20, 40, 40);
+          ob.addColorStop(0, "#a16207");
+          ob.addColorStop(1, "#451a03");
+          ctx.fillStyle = ob;
+          ctx.fill();
+          strokeShape(ctx, "rgba(66,21,14,0.55)", 2.5);
+          glossEllipse(ctx, 0, 4, 90, 40, 0, 0.15);
+          ctx.fillStyle = "#78350f";
+          ctx.beginPath();
+          ctx.arc(-42, -28, 18, 0, Math.PI * 2);
+          ctx.arc(42, -24, 16, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(40,21,13,0.45)";
+          ctx.stroke();
+          ctx.fillStyle = "#fef3c7";
+          ctx.beginPath();
+          ctx.arc(-52, -8, 6, 0, Math.PI * 2);
+          ctx.arc(54, -4, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#1f140c";
+          ctx.beginPath();
+          ctx.arc(16, -2, 4, 0, Math.PI * 2);
+          ctx.arc(-36, -6, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          roundRectPoly(ctx, -58, 40, 24, 16, 4);
+          roundRectPoly(ctx, 34, 40, 24, 16, 4);
+          ctx.fillStyle = "#292524";
+          ctx.fill();
+          ctx.restore();
+        } else if (id === "dragon_rayo") {
+          ctx.save();
+          ctx.translate(cx + 10, cy);
+          groundOval(ctx, -12, 60, 110, 18);
+          ctx.fillStyle = "rgba(251,191,36,0.35)";
+          for (var jf = -1; jf < 14; jf++) {
+            ctx.beginPath();
+            ctx.arc(-80 + jf * 28, -50 - jf % 4, 28, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.moveTo(-70, -6);
+          ctx.quadraticCurveTo(-20, -46, 50, -20);
+          ctx.quadraticCurveTo(88, 4, 70, 32);
+          ctx.quadraticCurveTo(32, 60, -30, 40);
+          ctx.quadraticCurveTo(-78, 20, -70, -6);
+          ctx.closePath();
+          var dg = ctx.createLinearGradient(-60, -40, 80, 30);
+          dg.addColorStop(0, "#1d4ed8");
+          dg.addColorStop(0.45, "#3b82f6");
+          dg.addColorStop(0.82, "#6366f1");
+          dg.addColorStop(1, "#3730a3");
+          ctx.fillStyle = dg;
+          ctx.fill();
+          strokeShape(ctx, "rgba(15,23,42,0.55)", 2.5);
+          glossEllipse(ctx, 18, -2, 78, 38, -0.12, 0.2);
+          ctx.fillStyle = "#3b82f6";
+          ctx.beginPath();
+          ctx.moveTo(10, -8);
+          ctx.lineTo(-12, -32);
+          ctx.lineTo(6, -12);
+          ctx.lineTo(-20, -38);
+          ctx.lineTo(-2, -4);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(12, -4);
+          ctx.lineTo(38, -18);
+          ctx.lineTo(20, -2);
+          ctx.lineTo(44, -8);
+          ctx.lineTo(26, 6);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#facc15";
+          ctx.lineWidth = 4;
+          ctx.lineJoin = "round";
+          ctx.beginPath();
+          ctx.moveTo(-40, -10);
+          ctx.lineTo(-20, -4);
+          ctx.lineTo(-32, 8);
+          ctx.lineTo(-8, 18);
+          ctx.lineTo(-18, 36);
+          ctx.lineTo(6, 20);
+          ctx.lineTo(-4, -6);
+          ctx.stroke();
+          ctx.fillStyle = "#fef08a";
+          ctx.strokeStyle = "#ca8a04";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(54, -4, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#172554";
+          ctx.beginPath();
+          ctx.arc(58, -6, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#f87171";
+          ctx.beginPath();
+          ctx.moveTo(68, -2);
+          ctx.lineTo(90, -6);
+          ctx.lineTo(72, 6);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        } else if (id === "roboticornio") {
+          ctx.save();
+          ctx.translate(cx, cy + 8);
+          groundOval(ctx, 0, 58, 100, 16);
+          ctx.fillStyle = "rgba(34,211,238,0.25)";
+          for (var hx = -2; hx < 12; hx++) {
+            ctx.beginPath();
+            ctx.arc(-70 + hx * 13, -48, 4 + (hx % 3), 0, Math.PI * 2);
+            ctx.fill();
+          }
+          roundRectPoly(ctx, -54, -20, 108, 68, 12);
+          var rob = ctx.createLinearGradient(-40, -28, 50, 40);
+          rob.addColorStop(0, "#94a3b8");
+          rob.addColorStop(0.55, "#64748b");
+          rob.addColorStop(1, "#334155");
+          ctx.fillStyle = rob;
+          ctx.fill();
+          strokeShape(ctx, "rgba(15,23,42,0.65)", 2.8);
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          ctx.globalAlpha = 0.5;
+          var panelSh = ctx.createLinearGradient(-50, -30, 40, 20);
+          panelSh.addColorStop(0, "rgba(255,255,255,0)");
+          panelSh.addColorStop(0.42, "rgba(255,255,255,0.22)");
+          panelSh.addColorStop(1, "rgba(148,223,255,0)");
+          ctx.fillStyle = panelSh;
+          roundRectPoly(ctx, -52, -18, 104, 64, 10);
+          ctx.fill();
+          ctx.restore();
+          ctx.fillStyle = "#fbbf24";
+          ctx.strokeStyle = "#b45309";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(18, -34);
+          ctx.lineTo(32, -72);
+          ctx.lineTo(10, -28);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#e2e8f0";
+          ctx.beginPath();
+          ctx.arc(8, -2, 12, 0, Math.PI * 2);
+          ctx.fill();
+          strokeShape(ctx, "rgba(51,65,85,0.8)", 2);
+          ctx.fillStyle = "#22d3ee";
+          ctx.strokeStyle = "#0e7490";
+          ctx.fillRect(-2, -10, 8, 8);
+          ctx.strokeRect(-2, -10, 8, 8);
+          ctx.fillStyle = "#0f172a";
+          ctx.fillRect(0, -8, 4, 4);
+          ctx.fillStyle = "#a78bfa";
+          ctx.beginPath();
+          ctx.arc(-52, -4, 5, 0, Math.PI * 2);
+          ctx.arc(58, -6, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#64748b";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(-26, -24);
+          ctx.lineTo(-64, -16);
+          ctx.moveTo(24, -24);
+          ctx.lineTo(64, -22);
+          ctx.stroke();
+          roundRectPoly(ctx, -48, 40, 20, 12, 2);
+          roundRectPoly(ctx, 28, 40, 20, 12, 2);
+          ctx.fillStyle = "#cbd5e1";
+          ctx.fill();
+          ctx.strokeStyle = "#1e293b";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.fillStyle = "#38bdf8";
+          ctx.strokeStyle = "#0369a1";
+          ctx.beginPath();
+          ctx.moveTo(68, -8);
+          ctx.lineTo(58, -2);
+          ctx.lineTo(64, -10);
+          ctx.lineTo(70, -4);
+          ctx.stroke();
+          ctx.restore();
+        } else if (id === "ajolote_celestial") {
+          ctx.save();
+          ctx.translate(cx + 8, cy + 14);
+          groundOval(ctx, -8, 54, 100, 16);
+          ctx.save();
+          ctx.globalAlpha = 0.55;
+          ctx.strokeStyle = "rgba(250,204,21,0.9)";
+          ctx.lineWidth = 2;
+          var sr;
+          for (sr = 0; sr < 6; sr++) {
+            ctx.beginPath();
+            ctx.arc(-8 + Math.cos(sr * 1.03) * 4, -48 + Math.sin(sr) * 2, 28 + sr * 5, Math.PI * 1.08, Math.PI * 2.02);
+            ctx.stroke();
+          }
+          ctx.restore();
+          ctx.strokeStyle = "rgba(251,191,36,0.98)";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(-8, -46, 20, Math.PI * 1.06, Math.PI * 2.04);
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(253,224,71,0.75)";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(-8, -48, 14, Math.PI * 1.2, Math.PI * 2);
+          ctx.stroke();
+          var aj = ctx.createRadialGradient(-32, -8, 4, -10, 6, 64);
+          aj.addColorStop(0, "#fce7f3");
+          aj.addColorStop(0.42, "#f9a8d4");
+          aj.addColorStop(0.78, "#ec4899");
+          aj.addColorStop(1, "#9d174d");
+          ctx.fillStyle = aj;
+          ctx.beginPath();
+          ctx.ellipse(-10, 2, 58, 32, -0.08, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(-10, 2, 58, 32, -0.08, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(157,23,77,0.5)", 2.25);
+          glossEllipse(ctx, -18, -4, 52, 28, -0.08, 0.32);
+          var finG = ctx.createRadialGradient(-58, -6, 2, -52, -4, 20);
+          finG.addColorStop(0, "#fbcfe8");
+          finG.addColorStop(1, "#db2777");
+          ctx.fillStyle = finG;
+          ctx.beginPath();
+          ctx.ellipse(-54, -4, 16, 20, -0.4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(157,23,77,0.55)";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.globalAlpha = 0.92;
+          ctx.strokeStyle = "#fef08a";
+          ctx.lineWidth = 2;
+          for (var ag = -1; ag < 10; ag++) {
+            ctx.beginPath();
+            ctx.arc(-46 + ag * 12, -2 + ag % 2, 9, Math.PI * 1.22, Math.PI * 2.06);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(-30, -6, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(131,24,67,0.25)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.fillStyle = "#831843";
+          ctx.beginPath();
+          ctx.arc(-27, -4, 3.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          ctx.beginPath();
+          ctx.arc(-32, -8, 1.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fde047";
+          for (var spx = -1; spx < 6; spx++) {
+            ctx.save();
+            ctx.translate(-68 + spx * 22, -44 + spx % 2);
+            ctx.rotate(spx * 0.35);
+            ctx.beginPath();
+            ctx.moveTo(0, -3);
+            ctx.lineTo(1, 0);
+            ctx.lineTo(-1, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+          ctx.restore();
+        } else if (id === "serpiente_hidra") {
+          ctx.save();
+          ctx.translate(cx + 4, cy + 10);
+          groundOval(ctx, 0, 58, 108, 17);
+          function stalk(ax, ay, bx, by, cx2, cy2, dx, dy) {
+            ctx.strokeStyle = "#14532d";
+            ctx.lineWidth = 11;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.beginPath();
+            ctx.moveTo(ax, ay);
+            ctx.bezierCurveTo(bx, by, cx2, cy2, dx, dy);
+            ctx.stroke();
+            ctx.strokeStyle = "#4ade80";
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(ax, ay);
+            ctx.bezierCurveTo(bx, by, cx2, cy2, dx, dy);
+            ctx.stroke();
+            ctx.strokeStyle = "rgba(187,247,208,0.75)";
+            ctx.lineWidth = 2.25;
+            ctx.beginPath();
+            ctx.moveTo(ax + 4, ay - 4);
+            ctx.bezierCurveTo(bx + 6, by - 2, cx2 + 4, cy2 + 6, dx, dy + 16);
+            ctx.stroke();
+          }
+          stalk(8, 32, -8, -2, -32, -12, -48, -36);
+          stalk(-4, 30, -6, -32, -4, -58, 2, -86);
+          stalk(28, 30, 36, -8, 44, -22, 40, -40);
+          var hx,
+            necks = [
+              { nx: -50, ny: -40, tilt: -0.18, hh: -96 },
+              { nx: -2, ny: -90, tilt: -0.02, hh: -104 },
+              { nx: 36, ny: -44, tilt: 0.22, hh: -88 }
+            ];
+          for (hx = 0; hx < necks.length; hx++) {
+            var nk = necks[hx],
+              hyGrad = ctx.createLinearGradient(nk.nx - 16, nk.ny - 50, nk.nx + 24, nk.ny + 40);
+            hyGrad.addColorStop(0, "#22c55e");
+            hyGrad.addColorStop(0.5, "#15803d");
+            hyGrad.addColorStop(1, "#14532d");
+            ctx.fillStyle = hyGrad;
+            ctx.beginPath();
+            ctx.ellipse(nk.nx, nk.ny, 22, 56, nk.tilt, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(nk.nx, nk.ny, 22, 56, nk.tilt, 0, Math.PI * 2);
+            strokeShape(ctx, "rgba(20,83,45,0.55)", 2.25);
+            glossEllipse(ctx, nk.nx + 8, nk.ny + 14, 20, 42, nk.tilt, 0.12);
+            ctx.fillStyle = "#86efac";
+            ctx.beginPath();
+            ctx.arc(nk.nx + nk.tilt * 40, nk.hh, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(20,83,45,0.45)";
+            ctx.lineWidth = 1.75;
+            ctx.stroke();
+            ctx.fillStyle = "#14532d";
+            ctx.beginPath();
+            ctx.arc(nk.nx + nk.tilt * 42 - 4, nk.hh - 2, 3, 0, Math.PI * 2);
+            ctx.arc(nk.nx + nk.tilt * 42 + 4, nk.hh, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#f87171";
+            ctx.beginPath();
+            ctx.moveTo(nk.nx + nk.tilt * 52 + 2, nk.hh + 10);
+            ctx.lineTo(nk.nx + nk.tilt * 68 + 4, nk.hh + 2);
+            ctx.lineTo(nk.nx + nk.tilt * 56 + 2, nk.hh + 4);
+            ctx.closePath();
+            ctx.fill();
+          }
+          ctx.strokeStyle = "rgba(34,84,54,0.35)";
+          ctx.lineWidth = 2;
+          for (var fx = -3; fx < 13; fx++) {
+            ctx.beginPath();
+            ctx.arc(-62 + fx * 10, 52 + fx % 2, 7, Math.PI * 1.08, Math.PI * 2.06);
+            ctx.stroke();
+          }
+          ctx.restore();
+        } else if (id === "mecha_ceratops") {
+          ctx.save();
+          ctx.translate(cx + 6, cy + 16);
+          groundOval(ctx, -4, 52, 106, 18);
+          ctx.fillStyle = "#64748b";
+          ctx.beginPath();
+          ctx.moveTo(-62, -38);
+          ctx.lineTo(-96, -70);
+          ctx.lineTo(-54, -52);
+          ctx.lineTo(-44, -28);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(-40, -42);
+          ctx.lineTo(-72, -82);
+          ctx.lineTo(-34, -54);
+          ctx.lineTo(-26, -34);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(-62, -38);
+          ctx.lineTo(-96, -70);
+          ctx.lineTo(-54, -52);
+          ctx.lineTo(-44, -28);
+          ctx.closePath();
+          ctx.moveTo(-40, -42);
+          ctx.lineTo(-72, -82);
+          ctx.lineTo(-34, -54);
+          ctx.lineTo(-26, -34);
+          ctx.closePath();
+          strokeShape(ctx, "rgba(15,23,42,0.65)", 2);
+          var mBody = ctx.createLinearGradient(-70, -32, 50, 32);
+          mBody.addColorStop(0, "#e2e8f0");
+          mBody.addColorStop(0.35, "#94a3b8");
+          mBody.addColorStop(0.65, "#64748b");
+          mBody.addColorStop(1, "#334155");
+          ctx.fillStyle = mBody;
+          ctx.beginPath();
+          ctx.ellipse(-8, -6, 72, 42, 0.05, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(-8, -6, 72, 42, 0.05, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(30,41,59,0.72)", 3);
+          ctx.save();
+          ctx.globalCompositeOperation = "screen";
+          ctx.globalAlpha = 0.35;
+          var riv = ctx.createRadialGradient(-40, -24, 0, -26, -18, 38);
+          riv.addColorStop(0, "rgba(255,255,255,0.95)");
+          riv.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = riv;
+          ctx.beginPath();
+          ctx.ellipse(-26, -12, 40, 24, -0.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          ctx.fillStyle = "#94a3b8";
+          ctx.beginPath();
+          ctx.arc(-30, -28, 26, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(-30, -28, 26, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(15,23,42,0.65)", 2);
+          glossEllipse(ctx, -28, -30, 24, 24, -0.05, 0.22);
+          ctx.fillStyle = "#fef08a";
+          ctx.strokeStyle = "#92400e";
+          ctx.lineWidth = 2;
+          for (var mh = 0; mh < 3; mh++) {
+            ctx.beginPath();
+            ctx.moveTo(-10 + mh * 22, -38);
+            ctx.lineTo(6 + mh * 24, -76 - mh * 10);
+            ctx.lineTo(18 + mh * 22, -36);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+          }
+          ctx.fillStyle = "#fef9c3";
+          ctx.beginPath();
+          ctx.arc(-44, -34, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#0f172a";
+          ctx.beginPath();
+          ctx.arc(-42, -34, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (id === "perro_burbuja") {
+          ctx.save();
+          ctx.translate(cx - 2, cy + 12);
+          groundOval(ctx, 6, 54, 104, 17);
+          ctx.strokeStyle = "rgba(56,189,248,0.55)";
+          ctx.lineWidth = 2;
+          for (var bb = 0; bb < 10; bb++) {
+            ctx.globalAlpha = 0.45 + (bb % 3) * 0.12;
+            ctx.beginPath();
+            ctx.arc(-70 + bb * 18, -36 + (bb % 2) * 8, 8 + bb % 4, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+          var dogF = ctx.createRadialGradient(-6, -6, 4, 8, 8, 56);
+          dogF.addColorStop(0, "#fde68a");
+          dogF.addColorStop(0.45, "#f59e0b");
+          dogF.addColorStop(1, "#b45309");
+          ctx.fillStyle = dogF;
+          ctx.beginPath();
+          ctx.ellipse(4, 4, 44, 36, 0.1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(4, 4, 44, 36, 0.1, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(120,53,15,0.52)", 2.65);
+          glossEllipse(ctx, -4, -4, 36, 30, 0.1, 0.26);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.5;
+          for (var bv = 0; bv < 8; bv++) {
+            ctx.beginPath();
+            ctx.arc(-74 + bv * 20, -28 + (bv % 2) * 5, 4 + bv % 3, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(224,249,255,0.7)";
+            ctx.lineWidth = 1.75;
+            ctx.stroke();
+          }
+          ctx.restore();
+          ctx.fillStyle = "#fbbf24";
+          ctx.beginPath();
+          ctx.moveTo(-28, -18);
+          ctx.lineTo(-46, -44);
+          ctx.lineTo(-16, -28);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(28, -16);
+          ctx.lineTo(48, -38);
+          ctx.lineTo(18, -26);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = "#78350f";
+          ctx.beginPath();
+          ctx.ellipse(18, 8, 18, 14, 0.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(-6, -4, 7, 0, Math.PI * 2);
+          ctx.arc(12, -2, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#1e140a";
+          ctx.beginPath();
+          ctx.arc(-4, -2, 2.5, 0, Math.PI * 2);
+          ctx.arc(12, 0, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (id === "conejo_demon") {
+          ctx.save();
+          ctx.translate(cx, cy + 14);
+          groundOval(ctx, 0, 52, 96, 16);
+          var earGn = ctx.createLinearGradient(-50, -100, -20, -40);
+          earGn.addColorStop(0, "#450a0a");
+          earGn.addColorStop(1, "#b91c1c");
+          ctx.fillStyle = earGn;
+          ctx.beginPath();
+          ctx.moveTo(-40, -48);
+          ctx.lineTo(-48, -102);
+          ctx.lineTo(-24, -56);
+          ctx.closePath();
+          ctx.fill();
+          var earGd = ctx.createLinearGradient(20, -96, 48, -36);
+          earGd.addColorStop(0, "#450a0a");
+          earGd.addColorStop(1, "#b91c1c");
+          ctx.fillStyle = earGd;
+          ctx.beginPath();
+          ctx.moveTo(24, -44);
+          ctx.lineTo(36, -98);
+          ctx.lineTo(12, -52);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "rgba(69,10,10,0.65)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(-38, -50);
+          ctx.lineTo(-44, -88);
+          ctx.moveTo(26, -46);
+          ctx.lineTo(32, -86);
+          ctx.stroke();
+          ctx.fillStyle = "#fef2f2";
+          ctx.beginPath();
+          ctx.ellipse(0, 6, 38, 34, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(0, 6, 38, 34, 0, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(127,29,29,0.55)", 2.5);
+          glossEllipse(ctx, -12, -2, 30, 28, 0, 0.2);
+          ctx.fillStyle = "#b91c1c";
+          ctx.beginPath();
+          ctx.moveTo(-4, -24);
+          ctx.lineTo(0, -46);
+          ctx.lineTo(6, -24);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(8, -22);
+          ctx.lineTo(14, -38);
+          ctx.lineTo(18, -20);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = "#f87171";
+          ctx.beginPath();
+          ctx.arc(-10, 0, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.rect(-16, -4, 8, 3);
+          ctx.rect(4, -2, 8, 3);
+          ctx.fill();
+          ctx.fillStyle = "#450a0a";
+          ctx.fillRect(-14, -3, 4, 2);
+          ctx.fillRect(6, -1, 4, 2);
+          ctx.restore();
+        } else if (id === "robo_gorila") {
+          ctx.save();
+          ctx.translate(cx + 4, cy + 8);
+          groundOval(ctx, -2, 62, 112, 20);
+          var gorCor = ctx.createLinearGradient(-58, -40, 40, 50);
+          gorCor.addColorStop(0, "#94a3b8");
+          gorCor.addColorStop(0.4, "#64748b");
+          gorCor.addColorStop(0.75, "#475569");
+          gorCor.addColorStop(1, "#1e293b");
+          ctx.fillStyle = gorCor;
+          roundRectPoly(ctx, -58, -40, 116, 88, 14);
+          ctx.fill();
+          roundRectPoly(ctx, -58, -40, 116, 88, 14);
+          strokeShape(ctx, "rgba(15,23,42,0.75)", 3);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.55;
+          var gorHi = ctx.createRadialGradient(-20, -28, 0, -6, -8, 70);
+          gorHi.addColorStop(0, "rgba(255,255,255,0.4)");
+          gorHi.addColorStop(1, "rgba(148,163,184,0)");
+          ctx.fillStyle = gorHi;
+          roundRectPoly(ctx, -56, -38, 112, 84, 12);
+          ctx.fill();
+          ctx.restore();
+          ctx.fillStyle = "#334155";
+          ctx.beginPath();
+          ctx.arc(-8, -48, 28, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(-8, -48, 28, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(2,6,23,0.65)", 2);
+          ctx.fillStyle = "#ef4444";
+          ctx.fillRect(-24, -56, 32, 8);
+          ctx.fillStyle = "#fef08a";
+          for (var le = 0; le < 5; le++) {
+            ctx.fillRect(-22 + le * 6, -54, 4, 4);
+          }
+          roundRectPoly(ctx, 48, -12, 36, 52, 8);
+          ctx.fillStyle = "#64748b";
+          ctx.fill();
+          roundRectPoly(ctx, 48, -12, 36, 52, 8);
+          strokeShape(ctx, "rgba(15,23,42,0.8)", 2);
+          ctx.fillStyle = "#1e293b";
+          ctx.beginPath();
+          ctx.arc(66, 8, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#94a3b8";
+          roundRectPoly(ctx, -70, 18, 28, 44, 6);
+          ctx.fill();
+          strokeShape(ctx, "rgba(15,23,42,0.75)", 2);
+          roundRectPoly(ctx, 38, 22, 30, 40, 6);
+          ctx.fill();
+          strokeShape(ctx, "rgba(15,23,42,0.75)", 2);
+          ctx.restore();
+        } else if (id === "devora_planetas") {
+          ctx.save();
+          ctx.translate(cx, cy + 6);
+          groundOval(ctx, 0, 60, 110, 18);
+          ctx.strokeStyle = "rgba(129,140,248,0.45)";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.ellipse(-48, -28, 22, 8, 0.3, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = "#8b5cf6";
+          ctx.beginPath();
+          ctx.arc(-48, -28, 10, 0, Math.PI * 2);
+          ctx.fill();
+          var hullG = ctx.createLinearGradient(-20, -50, 90, 50);
+          hullG.addColorStop(0, "#312e81");
+          hullG.addColorStop(0.42, "#1e1b4b");
+          hullG.addColorStop(1, "#0f172a");
+          ctx.fillStyle = hullG;
+          ctx.beginPath();
+          ctx.moveTo(32, -42);
+          ctx.quadraticCurveTo(88, -20, 72, 40);
+          ctx.quadraticCurveTo(48, 58, 10, 48);
+          ctx.quadraticCurveTo(-40, 38, -28, -8);
+          ctx.quadraticCurveTo(-12, -38, 32, -42);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(32, -42);
+          ctx.quadraticCurveTo(88, -20, 72, 40);
+          ctx.quadraticCurveTo(48, 58, 10, 48);
+          ctx.quadraticCurveTo(-40, 38, -28, -8);
+          ctx.quadraticCurveTo(-12, -38, 32, -42);
+          ctx.closePath();
+          strokeShape(ctx, "rgba(76,29,149,0.65)", 3);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = 0.42;
+          var thr = ctx.createRadialGradient(48, -6, 0, 32, 8, 80);
+          thr.addColorStop(0, "rgba(216,180,254,0.95)");
+          thr.addColorStop(0.65, "rgba(139,92,246,0.35)");
+          thr.addColorStop(1, "rgba(88,28,135,0)");
+          ctx.fillStyle = thr;
+          ctx.beginPath();
+          ctx.moveTo(32, -42);
+          ctx.quadraticCurveTo(88, -20, 72, 40);
+          ctx.quadraticCurveTo(48, 58, 10, 48);
+          ctx.quadraticCurveTo(-40, 38, -28, -8);
+          ctx.quadraticCurveTo(-12, -38, 32, -42);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+          ctx.strokeStyle = "rgba(167,139,250,0.55)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(20, -6, 86, 64, -0.12, Math.PI * 0.06, Math.PI * 2.06);
+          ctx.stroke();
+          ctx.fillStyle = "#faf5ff";
+          for (var te = 0; te < 12; te++) {
+            ctx.beginPath();
+            ctx.moveTo(-20 + te * 8, 8);
+            ctx.lineTo(-16 + te * 8, 24);
+            ctx.lineTo(-12 + te * 8, 6);
+            ctx.closePath();
+            ctx.fill();
+          }
+          var cockpit = ctx.createRadialGradient(34, -18, 2, 36, -10, 20);
+          cockpit.addColorStop(0, "#fda4af");
+          cockpit.addColorStop(0.65, "#f472b6");
+          cockpit.addColorStop(1, "#db2777");
+          ctx.fillStyle = cockpit;
+          ctx.beginPath();
+          ctx.arc(36, -10, 18, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(15,23,42,0.45)";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.fillStyle = "rgba(248,250,252,0.92)";
+          ctx.beginPath();
+          ctx.moveTo(30, -18);
+          ctx.lineTo(44, -12);
+          ctx.lineTo(34, -4);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "rgba(251,207,232,0.85)";
+          ctx.lineWidth = 1.25;
+          ctx.stroke();
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(30, -14, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#0f172a";
+          ctx.beginPath();
+          ctx.arc(32, -12, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+          for (var st = 0; st < 18; st++) {
+            ctx.fillStyle = "rgba(255,255,255," + (0.15 + (st % 4) * 0.08) + ")";
+            ctx.beginPath();
+            ctx.arc(Math.cos(st * 0.7) * 60, Math.sin(st * 0.8) * 40 - 20, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        } else if (id === "robo_caca") {
+          ctx.save();
+          ctx.translate(cx, cy + 10);
+          groundOval(ctx, 0, 56, 100, 18);
+          ctx.beginPath();
+          ctx.ellipse(0, 10, 44, 32, 0.06, 0, Math.PI * 2);
+          var pileRc = ctx.createRadialGradient(-18, -2, 2, 0, 12, 52);
+          pileRc.addColorStop(0, "#b45309");
+          pileRc.addColorStop(0.55, "#78350f");
+          pileRc.addColorStop(1, "#3f2312");
+          ctx.fillStyle = pileRc;
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(0, 10, 44, 32, 0.06, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(52,26,13,0.55)", 2.25);
+          glossEllipse(ctx, -14, 2, 38, 26, 0.06, 0.14);
+          ctx.fillStyle = "#64748b";
+          ctx.beginPath();
+          ctx.arc(-52, 4, 12, 0, Math.PI * 2);
+          ctx.arc(52, 4, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(-52, 4, 12, 0, Math.PI * 2);
+          ctx.arc(52, 4, 12, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(30,41,59,0.65)", 2);
+          ctx.fillStyle = "#475569";
+          ctx.fillRect(-56, -8, 112, 20);
+          ctx.strokeStyle = "rgba(15,23,42,0.8)";
+          ctx.lineWidth = 2.25;
+          ctx.strokeRect(-56, -8, 112, 20);
+          ctx.fillStyle = "#0f172a";
+          ctx.fillRect(-28, -4, 56, 10);
+          ctx.fillStyle = "#22c55e";
+          ctx.fillRect(-6, -3, 5, 3);
+          ctx.fillRect(1, -3, 7, 3);
+          ctx.strokeStyle = "rgba(6,95,70,0.9)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-6, -3, 5, 3);
+          ctx.strokeRect(1, -3, 7, 3);
+          var rivRc;
+          for (rivRc = 0; rivRc < 10; rivRc++) {
+            ctx.fillStyle = "#94a3b8";
+            ctx.beginPath();
+            ctx.arc(-45 + rivRc * 10, -26, 2.8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(-45 + rivRc * 10, -26, 2.8, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(30,41,59,0.55)";
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+          }
+          ctx.strokeStyle = "rgba(100,116,139,0.95)";
+          ctx.lineWidth = 3;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(0, -20);
+          ctx.lineTo(-2, -42);
+          ctx.lineTo(2, -42);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fillStyle = "#fbbf24";
+          ctx.strokeStyle = "#b45309";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, -46, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(90,74,62,0.55)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(48, -2);
+          ctx.quadraticCurveTo(62, -16, 58, -32);
+          ctx.stroke();
+          ctx.restore();
+        } else if (id === "leon_del_cielo") {
+          ctx.save();
+          ctx.translate(cx + 6, cy + 8);
+          groundOval(ctx, -4, 54, 104, 18);
+          ctx.fillStyle = "rgba(147,197,253,0.45)";
+          for (var lcm = -1; lcm < 14; lcm++) {
+            ctx.beginPath();
+            ctx.arc(-74 + lcm * 12, -44 - lcm % 3, 16 + lcm % 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.fillStyle = "rgba(255,251,254,0.92)";
+          for (var lc2 = 0; lc2 < 9; lc2++) {
+            ctx.beginPath();
+            ctx.arc(-58 + lc2 * 13, -32 + (lc2 % 2) * 4, 15, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          var lionB = ctx.createLinearGradient(-35, -25, 65, 35);
+          lionB.addColorStop(0, "#fde68a");
+          lionB.addColorStop(0.45, "#f59e0b");
+          lionB.addColorStop(1, "#b45309");
+          ctx.fillStyle = lionB;
+          ctx.beginPath();
+          ctx.ellipse(4, 4, 60, 38, -0.06, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(4, 4, 60, 38, -0.06, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(120,53,15,0.52)", 2.6);
+          glossEllipse(ctx, -8, -4, 48, 32, -0.06, 0.2);
+          ctx.fillStyle = "rgba(254,249,239,0.98)";
+          ctx.beginPath();
+          ctx.arc(52, -6, 20, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(52, -6, 20, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(146,174,217,0.45)", 2);
+          glossEllipse(ctx, 44, -10, 18, 16, -0.1, 0.22);
+          ctx.fillStyle = "#78350f";
+          ctx.beginPath();
+          ctx.ellipse(-30, -2, 8, 20, -0.45, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(20, -4, 8, 20, 0.4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(55,34,17,0.45)";
+          ctx.lineWidth = 1.75;
+          ctx.stroke();
+          ctx.fillStyle = "#422006";
+          ctx.beginPath();
+          ctx.arc(38, -4, 3.2, 0, Math.PI * 2);
+          ctx.arc(48, -4, 3.2, 0, Math.PI * 2);
+          ctx.arc(62, -2, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(180,83,9,0.45)";
+          ctx.lineWidth = 2;
+          ctx.fillStyle = "rgba(255,237,179,0.95)";
+          ctx.beginPath();
+          ctx.moveTo(-58, -4);
+          ctx.lineTo(-88, -18);
+          ctx.lineTo(-54, -16);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(10, -20);
+          ctx.lineTo(-12, -40);
+          ctx.lineTo(-2, -24);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "rgba(250,232,162,0.35)";
+          for (var fk = -2; fk < 14; fk++) {
+            radialBlob(ctx, -60 + fk * 10, -8 + fk % 2, 2, 6, "#fff7cf", "rgba(251,191,36,0)");
+            ctx.globalAlpha = 0.62;
+            ctx.beginPath();
+            ctx.arc(-60 + fk * 10, -18 + fk % 2, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+          ctx.restore();
+        } else if (id === "ojo_angelical") {
+          ctx.save();
+          ctx.translate(cx, cy + 4);
+          groundOval(ctx, 0, 58, 100, 17);
+          ctx.strokeStyle = "rgba(253,224,71,0.85)";
+          ctx.lineWidth = 3.25;
+          ctx.beginPath();
+          ctx.arc(-4, -36, 24, Math.PI * 1.06, Math.PI * 2.04);
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(251,191,36,0.55)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(-4, -38, 18, Math.PI * 1.08, Math.PI * 2.03);
+          ctx.stroke();
+          ctx.fillStyle = "rgba(226,242,254,0.6)";
+          for (var wg = -2; wg < 15; wg++) {
+            ctx.beginPath();
+            ctx.arc(-64 + wg * 9, -14 + wg % 2 * 10, 7, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.fillStyle = "rgba(237,233,254,0.9)";
+          ctx.lineWidth = 2.75;
+          ctx.strokeStyle = "rgba(167,139,250,0.75)";
+          ctx.beginPath();
+          ctx.moveTo(-56, 10);
+          ctx.quadraticCurveTo(-88, -32, -48, -54);
+          ctx.quadraticCurveTo(-12, -66, 20, -44);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(56, 10);
+          ctx.quadraticCurveTo(88, -32, 48, -54);
+          ctx.quadraticCurveTo(12, -66, -20, -44);
+          ctx.stroke();
+          var scleral = ctx.createRadialGradient(-8, -10, 4, -2, -4, 42);
+          scleral.addColorStop(0, "#ffffff");
+          scleral.addColorStop(0.55, "#f0f9ff");
+          scleral.addColorStop(1, "#bae6fd");
+          ctx.fillStyle = scleral;
+          ctx.beginPath();
+          ctx.ellipse(-2, -4, 42, 36, -0.05, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(-2, -4, 42, 36, -0.05, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(59,130,246,0.42)", 2.35);
+          var irisA = ctx.createRadialGradient(8, -12, 2, 4, -6, 28);
+          irisA.addColorStop(0, "#fef9c3");
+          irisA.addColorStop(0.35, "#fbbf24");
+          irisA.addColorStop(0.78, "#d97706");
+          irisA.addColorStop(1, "#92400e");
+          ctx.fillStyle = irisA;
+          ctx.beginPath();
+          ctx.ellipse(6, -6, 20, 22, -0.12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(6, -6, 20, 22, -0.12, 0, Math.PI * 2);
+          strokeShape(ctx, "rgba(120,53,15,0.35)", 1.5);
+          ctx.fillStyle = "#cffafe";
+          ctx.beginPath();
+          ctx.arc(14, -14, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(14,116,144,0.35)";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = "#0c4a6e";
+          ctx.beginPath();
+          ctx.arc(8, -8, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,0.95)";
+          ctx.beginPath();
+          ctx.arc(11, -12, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 0.72;
+          ctx.fillStyle = "rgba(250,251,253,0.88)";
+          ctx.beginPath();
+          ctx.arc(-28, -16, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
+      }
+
+      function shuffleIntsInPlace(ar) {
+        for (var si = ar.length - 1; si > 0; si--) {
+          var sj = Math.floor(Math.random() * (si + 1));
+          var tmp = ar[si];
+          ar[si] = ar[sj];
+          ar[sj] = tmp;
+        }
+      }
+
+      function updateDigHud() {
+        if (!digSession) return;
+        var leftShovels = DIG_MAX_SHOVELS - digSession.shovelUsed;
+        var shovelEl = document.getElementById("dnaShovelRemain");
+        if (shovelEl) shovelEl.textContent = String(Math.max(0, leftShovels));
+        var labSt = document.getElementById("dnaDigStatus");
+        if (labSt) {
+          labSt.textContent =
+            "Pala usada: " +
+            digSession.shovelUsed +
+            " / " +
+            DIG_MAX_SHOVELS +
+            " · Muestras 🧬 en casillas pisadas: " +
+            digSession.hits;
+        }
+      }
+
+      function onDigCellClick(evDig) {
+        if (!digSession || digSession.ended) return;
+        var targ = evDig.currentTarget;
+        var idxDig = parseInt(targ.dataset.index, 10);
+        if (isNaN(idxDig) || digSession.dug[idxDig]) return;
+        if (digSession.shovelUsed >= DIG_MAX_SHOVELS) return;
+
+        digSession.dug[idxDig] = true;
+        digSession.shovelUsed++;
+        if (digSession.dnaCells[idxDig]) digSession.hits++;
+
+        targ.disabled = true;
+        if (digSession.dnaCells[idxDig]) {
+          targ.classList.add("hit-dna");
+          targ.textContent = "🧬";
+        } else {
+          targ.classList.add("hit-stone");
+          targ.textContent = "·";
+        }
+
+        updateDigHud();
+        if (digSession.shovelUsed >= DIG_MAX_SHOVELS) {
+          finalizeDigMiniGame();
+        }
+      }
+
+      function finalizeDigMiniGame() {
+        if (!digSession || digSession.ended) return;
+        digSession.ended = true;
+        var sess = digSession;
+
+        var gr = document.getElementById("dnaDigGrid");
+        var cellsBt = gr ? gr.querySelectorAll("button.dig-cell") : [];
+        var ci;
+        for (ci = 0; ci < DIG_CELL_TOTAL; ci++) {
+          var bt = cellsBt[ci];
+          if (!bt) continue;
+          bt.disabled = true;
+          if (!sess.dug[ci]) {
+            if (sess.dnaCells[ci]) {
+              bt.classList.add("missed-dna");
+              bt.textContent = "🧬";
+            } else {
+              bt.classList.add("hit-stone");
+              bt.textContent = "·";
+              bt.style.opacity = "0.6";
+            }
+          }
+        }
+
+        var hTot = sess.hits;
+        var dnGain = 0;
+        if (hTot > 0) {
+          dnGain = Math.min(52, 10 + hTot * 7 + Math.floor(Math.random() * (8 + hTot * 3)));
+          state.dna += dnGain;
+          toast("¡Muestra genética! +" + dnGain + " ADN 🧬 (encontraste " + hTot + " casillas con restos)");
+        } else {
+          toast("Solo piedras… 0 ADN esta ronda 😅 Volvé después del enfriamiento del jeep.");
+        }
+        state.dnaExpeditionReadyAt = Date.now() + DNA_EXPEDITION_COOLDOWN_MS;
+
+        refreshDynamic();
+
+        setTimeout(function () {
+          digSession = null;
+          var ox = document.getElementById("dnaDigOverlay");
+          if (ox) ox.classList.add("hidden");
+          if (gr) gr.innerHTML = "";
+          refreshDynamic();
+        }, 2600);
+      }
+
+      function openDigMiniGame() {
+        var tz = Date.now();
+        var ovLay = document.getElementById("dnaDigOverlay");
+        if (ovLay && !ovLay.classList.contains("hidden")) return;
+        if (tz < state.dnaExpeditionReadyAt) return;
+        if (state.coins < DNA_EXPEDITION_COST) {
+          toast("¡Necesitás " + DNA_EXPEDITION_COST + " fichas ✦ para el permiso en la cantera!");
+          return;
+        }
+
+        state.coins -= DNA_EXPEDITION_COST;
+
+        var order = [];
+        for (var qi = 0; qi < DIG_CELL_TOTAL; qi++) order.push(qi);
+        shuffleIntsInPlace(order);
+        var dnaCells = [];
+        for (var qj = 0; qj < DIG_CELL_TOTAL; qj++) dnaCells.push(false);
+        var qh;
+        for (qh = 0; qh < DIG_HIDDEN_DNA_SLOTS; qh++) {
+          dnaCells[order[qh]] = true;
+        }
+
+        var dugSlots = [];
+        for (var qk = 0; qk < DIG_CELL_TOTAL; qk++) dugSlots.push(false);
+
+        digSession = {
+          dnaCells: dnaCells,
+          dug: dugSlots,
+          shovelUsed: 0,
+          hits: 0,
+          ended: false
+        };
+
+        var grEl = document.getElementById("dnaDigGrid");
+        grEl.innerHTML = "";
+        var rr;
+        var cc;
+        for (rr = 0; rr < DIG_ROWS; rr++) {
+          for (cc = 0; cc < DIG_COLS; cc++) {
+            var idi = rr * DIG_COLS + cc;
+            var cel = document.createElement("button");
+            cel.type = "button";
+            cel.className = "dig-cell";
+            cel.dataset.index = String(idi);
+            cel.textContent = "🪨";
+            cel.title = "Cavar piedra · casilla " + (idi + 1);
+            cel.addEventListener("click", onDigCellClick);
+            grEl.appendChild(cel);
+          }
+        }
+
+        ovLay.classList.remove("hidden");
+        updateDigHud();
+        refreshDynamic();
+      }
+
+      function refreshDnaExpeditionAndGenesis() {
+        var btnEx = document.getElementById("btnDnaExpedition");
+        var helpEx = document.getElementById("dnaExpeditionHelp");
+        var nowEx = Date.now();
+        var waitEx = Math.max(0, state.dnaExpeditionReadyAt - nowEx);
+        var overlayEl = document.getElementById("dnaDigOverlay");
+        var excavationOpen =
+          !!(overlayEl && !overlayEl.classList.contains("hidden"));
+        if (btnEx) {
+          if (waitEx > 0) {
+            btnEx.disabled = true;
+            btnEx.textContent =
+              "Jeep enfriándose (" +
+              Math.ceil(waitEx / 1000) +
+              " s)";
+          } else {
+            btnEx.disabled =
+              excavationOpen ||
+              state.coins < DNA_EXPEDITION_COST;
+            btnEx.textContent =
+              "Excavar cantera (-" +
+              DNA_EXPEDITION_COST +
+              " ✦)";
+          }
+        }
+        if (helpEx) {
+          helpEx.textContent =
+            "Pagás entrada " +
+            DNA_EXPEDITION_COST +
+            " ✦ por turno en la cantera. Excavás con solo " +
+            DIG_MAX_SHOVELS +
+            " palas en una grilla " +
+            DIG_COLS +
+            "×" +
+            DIG_ROWS +
+            " de piedras: si tocás muestras con ADN ganás muestras. Entre camiones esperá ~" +
+            Math.ceil(DNA_EXPEDITION_COOLDOWN_MS / 1000) +
+            " s.";
+        }
+
+        function updGen(cardId, detId, costId, btnId, sid) {
+          var spp = getSpeciesById(sid);
+          var crd = document.getElementById(cardId);
+          var det = document.getElementById(detId);
+          var cst = document.getElementById(costId);
+          var btb = document.getElementById(btnId);
+          if (!spp || !spp.createCost || !crd || !det || !cst || !btb) return;
+          var done = !!state.owned[sid];
+          var cc = spp.createCost;
+          var xc = genesisCoinCost(cc);
+          crd.classList.toggle("done", done);
+          det.textContent = spp.desc;
+          cst.textContent =
+            xc > 0
+              ? "Receta · " + cc.dna + " 🧬 + " + xc + " ✦"
+              : "Solo ADN · " + cc.dna + " muestras 🧬";
+          if (!done) {
+            btb.textContent =
+              xc > 0 ? "¡Clonar! (" + cc.dna + " 🧬 + " + xc + " ✦)" : "¡Clonar! (" + cc.dna + " 🧬)";
+            btb.disabled = state.dna < cc.dna || (xc > 0 && state.coins < xc);
+          }
+        }
+
+        for (var gi = 0; gi < GENESIS_UI.length; gi++) {
+          var gw = GENESIS_UI[gi];
+          updGen(gw.card, gw.detail, gw.cost, gw.btn, gw.sid);
+        }
+      }
+
+      function tryDnaExpedition() {
+        openDigMiniGame();
+      }
+
+      function tryGenesisClone(genId) {
+        var spp2 = getSpeciesById(genId);
+        if (!spp2 || !spp2.createCost || state.owned[genId]) return;
+        var gx = genesisCoinCost(spp2.createCost);
+        if (state.dna < spp2.createCost.dna) return;
+        if (gx > 0 && state.coins < gx) return;
+        state.dna -= spp2.createCost.dna;
+        if (gx > 0) state.coins -= gx;
+        ensureOwned(genId);
+        toast("¡" + spp2.name + " clonada! Ya está en Exotic Park 🧬");
+        render();
+        refreshDynamic();
+      }
+
+      function refreshLabUI() {
+        var L = ensureLab();
+        var synthEl = document.getElementById("labSynthLvl");
+        var zenEl = document.getElementById("labZenLvl");
+        var megaEl = document.getElementById("labMegaLvl");
+        var cardSynth = document.getElementById("labCardSynth");
+        var cardZen = document.getElementById("labCardZen");
+        var cardMega = document.getElementById("labCardMega");
+        var btnSynth = document.getElementById("btnLabSynth");
+        var btnZen = document.getElementById("btnLabZen");
+        var btnMega = document.getElementById("btnLabMega");
+        var dSynth = document.getElementById("labSynthDetail");
+        var dZen = document.getElementById("labZenDetail");
+        var dMega = document.getElementById("labMegaDetail");
+
+        if (synthEl) synthEl.textContent = "Nv " + L.synth + " / " + LAB_SYNTH_MAX;
+        if (zenEl) zenEl.textContent = "Nv " + L.zen + " / " + LAB_ZEN_MAX;
+        if (megaEl) megaEl.textContent = "Nv " + L.megafone + " / " + LAB_MEGA_MAX;
+
+        if (dSynth) {
+          dSynth.textContent =
+            "Tuberías mejoradas: ahora tus ingresos pasivos están al " +
+            Math.round(labSynthMultiplier() * 100) +
+            "% del valor base.";
+        }
+        if (dZen) {
+          dZen.textContent =
+            "Zen del musgo: el ánimo cae más lento (~" +
+            Math.round(labDecayFactor() * 100) +
+            "% de la velocidad original) y los snacks recuperan +" +
+            (feedHappinessBoost() - 38) +
+            " puntos extras.";
+        }
+        if (dMega) {
+          dMega.textContent =
+            "Cada visita rápida paga +" +
+            tourBonusCoins() +
+            " ✦ por autobús (sube por nivel del megáfono).";
+        }
+
+        if (cardSynth) cardSynth.classList.toggle("maxed", L.synth >= LAB_SYNTH_MAX);
+        if (cardZen) cardZen.classList.toggle("maxed", L.zen >= LAB_ZEN_MAX);
+        if (cardMega) cardMega.classList.toggle("maxed", L.megafone >= LAB_MEGA_MAX);
+
+        if (btnSynth && L.synth < LAB_SYNTH_MAX) {
+          var cS = LAB_SYNTH_COSTS[L.synth];
+          btnSynth.textContent = "Mejorar (" + cS + " ✦)";
+          btnSynth.disabled = state.coins < cS;
+        }
+        if (btnZen && L.zen < LAB_ZEN_MAX) {
+          var cZ = LAB_ZEN_COSTS[L.zen];
+          btnZen.textContent = "Mejorar (" + cZ + " ✦)";
+          btnZen.disabled = state.coins < cZ;
+        }
+        if (btnMega && L.megafone < LAB_MEGA_MAX) {
+          var cM = LAB_MEGA_COSTS[L.megafone];
+          btnMega.textContent = "Mejorar (" + cM + " ✦)";
+          btnMega.disabled = state.coins < cM;
+        }
+
+        refreshDnaExpeditionAndGenesis();
+      }
+
+      function refreshDynamic() {
+        coinsEl.textContent = formatNum(state.coins);
+        var dnaCountEl = document.getElementById("dnaCount");
+        if (dnaCountEl) dnaCountEl.textContent = String(Math.floor(state.dna));
+        var pps = passivePerSecond();
+        incomeTotalEl.textContent =
+          "🦴 Ingresos por segundo (con licuadora ×" +
+          labSynthMultiplier().toFixed(2) +
+          "): " +
+          formatNum(pps) +
+          " ✦/s";
+
+        var now = Date.now();
+        for (var i = 0; i < SPECIES.length; i++) {
+          var s = SPECIES[i];
+          var card = deckEl.querySelector('[data-species="' + s.id + '"]');
+          if (!card) continue;
+
+          if (!state.owned[s.id]) {
+            var buy2 = card.querySelector('[data-role="buy"]');
+            if (buy2 && typeof s.price === "number") {
+              buy2.disabled = state.coins < s.price;
+            }
+            continue;
+          }
+
+          var o = state.owned[s.id];
+          var incEl = card.querySelector('[data-role="income"]');
+          var barEl = card.querySelector('[data-role="happiness-bar"]');
+          var feedBtn = card.querySelector('[data-role="feed"]');
+          if (incEl) {
+            incEl.textContent =
+              "🪙 Rinde: " +
+              formatNum(s.baseIncome * happinessMultiplier(o.happiness) * labSynthMultiplier()) +
+              " ✦/s";
+          }
+          if (barEl) barEl.style.width = o.happiness + "%";
+          if (feedBtn) {
+            if (now < o.feedReadyAt) {
+              feedBtn.disabled = true;
+              feedBtn.textContent = "ZZZ durmiendo…";
+            } else {
+              feedBtn.disabled = false;
+              feedBtn.textContent = "¡Dar snacks!";
+            }
+          }
+        }
+
+        var cdMs = Math.max(0, state.tourReadyAt - now);
+        btnTour.disabled = cdMs > 0;
+        var tb = tourBonusCoins();
+        btnTour.textContent =
+          cdMs > 0
+            ? "🚌 ¡Visita rápida! (" + Math.ceil(cdMs / 1000) + " s)"
+            : "🚌 ¡Visita rápida! (+" + tb + " ✦ · 20 s)";
+
+        refreshLabUI();
+      }
+
+      function render() {
+        deckEl.innerHTML = "";
+        for (var i = 0; i < SPECIES.length; i++) {
+          var s = SPECIES[i];
+          var owned = !!state.owned[s.id];
+          var data = owned ? state.owned[s.id] : null;
+
+          var art = document.createElement("div");
+          art.className = "art" + (owned ? "" : " locked");
+          var canv = document.createElement("canvas");
+          canv.width = 440;
+          canv.height = 180;
+          canv.setAttribute("aria-label", "Ilustración geométrica de " + s.name);
+          drawCreatureShape(canv.getContext("2d"), s.id, canv.width, canv.height);
+          art.appendChild(canv);
+          if (!owned) {
+            var ll = document.createElement("div");
+            ll.className = "lock-label";
+            ll.textContent = isGenesisSpecies(s)
+              ? "🧬 Prototipo en el LAB"
+              : "🔒 Sin bicho — cartel cerrado";
+            art.appendChild(ll);
+          }
+
+          var body = document.createElement("div");
+          body.className = "body";
+
+          var h2 = document.createElement("h2");
+          h2.textContent = s.name;
+          body.appendChild(h2);
+
+          var tag = document.createElement("p");
+          tag.className = "spec-tag";
+          tag.textContent = s.tag;
+          body.appendChild(tag);
+
+          if (!owned && isGenesisSpecies(s)) {
+            var gh = document.createElement("p");
+            gh.style.fontWeight = "800";
+            gh.style.fontSize = "0.82rem";
+            gh.style.marginTop = "4px";
+            gh.style.color = "#5b21b6";
+            gh.textContent = "🧬 Solo en incubadora LAB (ADN)";
+            body.appendChild(gh);
+            var gxP = genesisCoinCost(s.createCost);
+            var gxEl = document.createElement("p");
+            gxEl.className = "desc";
+            gxEl.style.fontStyle = "italic";
+            gxEl.style.marginTop = "6px";
+            gxEl.textContent =
+              gxP > 0
+                ? "Costo: " + s.createCost.dna + " 🧬 + " + gxP + " ✦ — clonar en Laboratorio."
+                : "Costo: " + s.createCost.dna + " muestras de ADN solo — pestaña Laboratorio.";
+            body.appendChild(gxEl);
+          }
+
+          var desc = document.createElement("p");
+          desc.className = "desc";
+          desc.textContent = s.desc;
+          body.appendChild(desc);
+
+          var actions = document.createElement("div");
+          actions.className = "actions";
+
+          if (owned) {
+            var inc = document.createElement("p");
+            inc.className = "income";
+            inc.setAttribute("data-role", "income");
+            inc.textContent =
+              "🪙 Rinde: " +
+              formatNum(s.baseIncome * happinessMultiplier(data.happiness) * labSynthMultiplier()) +
+              " ✦/s";
+            body.insertBefore(inc, desc);
+
+            var bw = document.createElement("div");
+            bw.className = "bar-wrap";
+            bw.textContent = "Ánimo del bicho";
+            var bar = document.createElement("div");
+            bar.className = "bar";
+            var bi = document.createElement("i");
+            bi.setAttribute("data-role", "happiness-bar");
+            bi.style.width = data.happiness + "%";
+            bar.appendChild(bi);
+            bw.appendChild(bar);
+            body.insertBefore(bw, desc);
+
+            var feed = document.createElement("button");
+            feed.type = "button";
+            feed.className = "btn-feed";
+            feed.setAttribute("data-role", "feed");
+            feed.textContent = "¡Dar snacks!";
+            var now0 = Date.now();
+            if (now0 < data.feedReadyAt) {
+              feed.disabled = true;
+              feed.textContent = "ZZZ durmiendo…";
+            }
+            feed.addEventListener("click", function (id) {
+              return function () {
+                var d = state.owned[id];
+                if (!d) return;
+                var t = Date.now();
+                if (t < d.feedReadyAt) return;
+                d.happiness = Math.min(100, d.happiness + feedHappinessBoost());
+                d.feedReadyAt = t + 14000;
+                toast("¡" + speciesName(id) + " está re contento!");
+                refreshDynamic();
+              };
+            }(s.id));
+            actions.appendChild(feed);
+          } else if (!isGenesisSpecies(s)) {
+            var buy = document.createElement("button");
+            buy.type = "button";
+            buy.className = "btn-buy";
+            buy.setAttribute("data-role", "buy");
+            buy.textContent =
+              typeof s.price === "number" && s.price === 0
+                ? "¡Abrir recinto GRATIS!"
+                : "¡Abrir recinto! (" + s.price + " ✦)";
+            buy.disabled = typeof s.price !== "number" || state.coins < s.price;
+            buy.addEventListener("click", function (sp) {
+              return function () {
+                if (state.coins < sp.price) return;
+                state.coins -= sp.price;
+                ensureOwned(sp.id);
+                toast(sp.name + " ya tiene su corral ¡rawr!");
+                render();
+                refreshDynamic();
+              };
+            }(s));
+            actions.appendChild(buy);
+          }
+
+          body.appendChild(actions);
+
+          var card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("data-species", s.id);
+          card.appendChild(art);
+          card.appendChild(body);
+          deckEl.appendChild(card);
+        }
+
+        refreshDynamic();
+        requestAnimationFrame(function () {
+          applyCarouselLayout();
+        });
+      }
+
+      var last = performance.now();
+      function tick(now) {
+        var dt = Math.min(0.12, (now - last) / 1000);
+        last = now;
+
+        for (var i = 0; i < SPECIES.length; i++) {
+          var id = SPECIES[i].id;
+          if (!state.owned[id]) continue;
+          var o = state.owned[id];
+          o.happiness = Math.max(0, o.happiness - 2.2 * labDecayFactor() * dt);
+        }
+
+        state.coins += passivePerSecond() * dt;
+        refreshDynamic();
+        requestAnimationFrame(tick);
+      }
+
+      btnTour.addEventListener("click", function () {
+        var t = Date.now();
+        if (t < state.tourReadyAt) return;
+        var hasAny = false;
+        for (var k in state.owned) {
+          if (state.owned.hasOwnProperty(k)) {
+            hasAny = true;
+            break;
+          }
+        }
+        if (!hasAny) {
+          toast("¡Necesitás al menos un bicho para el autobús!");
+          return;
+        }
+        var gan = tourBonusCoins();
+        state.coins += gan;
+        state.tourReadyAt = t + 20000;
+        toast("¡Los pibes del cole largaron la plata! +" + gan + " ✦");
+        refreshDynamic();
+      });
+
+      btnSave.addEventListener("click", save);
+
+      document.getElementById("tabPark").addEventListener("click", function () {
+        document.getElementById("tabPark").classList.add("active");
+        document.getElementById("tabLab").classList.remove("active");
+        document.getElementById("tabPark").setAttribute("aria-selected", "true");
+        document.getElementById("tabLab").setAttribute("aria-selected", "false");
+        document.getElementById("viewPark").classList.remove("hidden");
+        document.getElementById("viewLab").classList.add("hidden");
+        requestAnimationFrame(applyCarouselLayout);
+      });
+
+      document.getElementById("tabLab").addEventListener("click", function () {
+        document.getElementById("tabLab").classList.add("active");
+        document.getElementById("tabPark").classList.remove("active");
+        document.getElementById("tabLab").setAttribute("aria-selected", "true");
+        document.getElementById("tabPark").setAttribute("aria-selected", "false");
+        document.getElementById("viewLab").classList.remove("hidden");
+        document.getElementById("viewPark").classList.add("hidden");
+        refreshLabUI();
+      });
+
+      function tryBuySynth() {
+        var L = ensureLab();
+        if (L.synth >= LAB_SYNTH_MAX) return;
+        var c = LAB_SYNTH_COSTS[L.synth];
+        if (state.coins < c) return;
+        state.coins -= c;
+        L.synth++;
+        toast("¡Licuadora mejorada! Rendimiento +" + Math.round(L.synth * 9) + "% sobre la base.");
+        refreshDynamic();
+      }
+
+      function tryBuyZen() {
+        var L = ensureLab();
+        if (L.zen >= LAB_ZEN_MAX) return;
+        var c = LAB_ZEN_COSTS[L.zen];
+        if (state.coins < c) return;
+        state.coins -= c;
+        L.zen++;
+        toast("¡Zen del musgo nivel " + L.zen + "!");
+        refreshDynamic();
+      }
+
+      function tryBuyMega() {
+        var L = ensureLab();
+        if (L.megafone >= LAB_MEGA_MAX) return;
+        var c = LAB_MEGA_COSTS[L.megafone];
+        if (state.coins < c) return;
+        state.coins -= c;
+        L.megafone++;
+        toast("¡Megáfono holográfico +" + L.megafone + "! Más fichas por visita.");
+        refreshDynamic();
+      }
+
+      document.getElementById("btnLabSynth").addEventListener("click", tryBuySynth);
+      document.getElementById("btnLabZen").addEventListener("click", tryBuyZen);
+      document.getElementById("btnLabMega").addEventListener("click", tryBuyMega);
+
+      document.getElementById("btnDnaExpedition").addEventListener("click", tryDnaExpedition);
+      for (var gk = 0; gk < GENESIS_UI.length; gk++) {
+        (function (sidBtn) {
+          document.getElementById(sidBtn.btn).addEventListener("click", function () {
+            tryGenesisClone(sidBtn.sid);
+          });
+        })(GENESIS_UI[gk]);
+      }
+
+      load();
+      for (var j = 0; j < SPECIES.length; j++) {
+        var s0 = SPECIES[j];
+        if (typeof s0.price === "number" && s0.price === 0 && !isGenesisSpecies(s0)) ensureOwned(s0.id);
+      }
+
+      ensureLab();
+      render();
+      refreshLabUI();
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>
+
